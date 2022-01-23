@@ -12,7 +12,7 @@ namespace Balubas
         public string PreviousHash { get; set; }
         public ulong Nonce { get; set; }
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-        public TransactionInputs Inputs { get; set; }
+        public TransactionInput[] Inputs { get; set; }
         public TransactionOutput[] Outputs { get; set; }
         public string Sign { get; set; }
 

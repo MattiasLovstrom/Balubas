@@ -23,7 +23,7 @@ namespace Balubas.Tests
             {
                 Hash = "1",
                 PreviousHash = Repository.GenesisBlock.Hash,
-                Inputs = new TransactionInputs { new TransactionInput { Hash = Repository.GenesisBlock.Hash, Row=0} },
+                Inputs = new [] { new TransactionInput { Hash = Repository.GenesisBlock.Hash, Row=0} },
                 Outputs = new [] { new TransactionOutput { Amount=Repository.GenesisAmount, Receiver = "myPulicKey",Sign="mySign" } },
             };
             

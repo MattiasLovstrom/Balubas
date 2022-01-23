@@ -75,7 +75,7 @@ namespace BlockChainTest.Tests
             transaction1.Outputs = new[] { new TransactionOutput { Amount = 1, Receiver = "myWalletId" } };
             _testObject.Add(transaction1);
             var transaction2 = new TransactionBlock { PreviousHash = "1", Hash = "2" };
-            transaction2.Inputs = new TransactionInputs { new TransactionInput { Hash = "1", Row = 0 } };
+            transaction2.Inputs = new [] { new TransactionInput { Hash = "1", Row = 0 } };
             transaction2.Outputs = new[] { new TransactionOutput { Amount = 2, Receiver = "myWalletId" } };
             _testObject.Add(transaction2);
 

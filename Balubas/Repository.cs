@@ -17,7 +17,7 @@ namespace Balubas
         {
             PreviousHash = null,
             Hash = GenesisHash,
-            Inputs = new TransactionInputs
+            Inputs = new []
             {
                 new TransactionInput{Hash = GenesisHash, Row = 0}
             },

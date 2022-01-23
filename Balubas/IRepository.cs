@@ -2,7 +2,7 @@
 
 namespace Balubas
 {
-    public interface IBlockChain
+    public interface IRepository : IEnumerable<TransactionBlock>
     {
         void Add(TransactionBlock block);
         IEnumerable<TransactionBlock> TransactionsTo(string walletId);

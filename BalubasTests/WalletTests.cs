@@ -10,7 +10,7 @@ namespace BlockChainTest.Tests
     [TestClass()]
     public class WalletTests
     {
-        private Mock<IBlockChain> _repositoryMock;
+        private Mock<IRepository> _repositoryMock;
         private Mock<ICryptoHandler> _cryptoMock;
 
         [TestInitialize]
@@ -23,7 +23,7 @@ namespace BlockChainTest.Tests
             _cryptoMock
                 .Setup(crypto => crypto.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(true);
-            _repositoryMock = new Mock<IBlockChain>();
+            _repositoryMock = new Mock<IRepository>();
             _repositoryMock
                 .Setup(chain => chain.TransactionsTo(It.IsAny<string>()))
                 .Returns(new List<TransactionBlock>

@@ -20,7 +20,7 @@ namespace BlockChainTest.Tests
             var block = new TransactionBlock();
             block.Hash = block.GetHashCode().ToString();
             block.PreviousHash = previousHash;
-            block.Inputs = new[] { new TransactionInput {Hash = previousHash, Row = 0}};
+            block.Inputs = new TransactionInputs { new TransactionInput {Hash = previousHash, Row = 0}};
             block.Outputs = new[] {new TransactionOutput {Amount = Repository.GenesisAmount, Receiver = "myPublicKey", Sign = "MySign"}};
             
             return block;

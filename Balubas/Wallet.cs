@@ -8,11 +8,11 @@ namespace Balubas
 {
     public class Wallet
     {
-        private readonly IBlockChain _blockChain;
+        private readonly IRepository _blockChain;
         private readonly ICryptoHandler _crypto;
 
         public Wallet(
-            IBlockChain repository,
+            IRepository repository,
             ICryptoHandler crypto)
         {
             _blockChain = repository;
@@ -33,7 +33,7 @@ namespace Balubas
 
         public TransactionBlock Send(double amount, string walletId)
         {
-            var inputs = new List<TransactionInput>();
+            var inputs = new TransactionInputs();
             var collectedAmount = 0.0;
             foreach (var transaction in UnspentTransactions)
             {
@@ -64,7 +64,7 @@ namespace Balubas
 
             return new TransactionBlock
             {
-                Inputs = inputs.ToArray(),
+                Inputs = inputs,
                 Outputs = outputs.ToArray()
             };
         }

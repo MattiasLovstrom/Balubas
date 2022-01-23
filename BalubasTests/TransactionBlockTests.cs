@@ -15,14 +15,14 @@ namespace BlockChainTest.Tests
             Assert.IsFalse(block.GetHashData().Contains("myHash"));
         }
 
-        public static TransactionBlock CreateBlock(string previousHash = Repository.GenesisHash)
+        public static TransactionBlock CreateBlock(string previousHash = Genesis.Hash)
         {
             var block = new TransactionBlock();
             block.Hash = block.GetHashCode().ToString();
             block.PreviousHash = previousHash;
-            block.Inputs = new [] { new TransactionInput {Hash = previousHash, Row = 0}};
-            block.Outputs = new[] {new TransactionOutput {Amount = Repository.GenesisAmount, Receiver = "myPublicKey", Sign = "MySign"}};
-            
+            block.Inputs = new[] { new TransactionInput { Hash = previousHash, Row = 0 } };
+            block.Outputs = new[] { new TransactionOutput { Amount = Genesis.Amount, Receiver = "myPublicKey", Sign = "MySign" } };
+
             return block;
         }
     }

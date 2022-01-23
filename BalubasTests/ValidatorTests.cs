@@ -22,14 +22,14 @@ namespace Balubas.Tests
             _transaction = new TransactionBlock
             {
                 Hash = "1",
-                PreviousHash = Repository.GenesisBlock.Hash,
-                Inputs = new [] { new TransactionInput { Hash = Repository.GenesisBlock.Hash, Row=0} },
-                Outputs = new [] { new TransactionOutput { Amount=Repository.GenesisAmount, Receiver = "myPulicKey",Sign="mySign" } },
+                PreviousHash = Genesis.Hash,
+                Inputs = new[] { new TransactionInput { Hash = Genesis.Hash, Row = 0 } },
+                Outputs = new[] { new TransactionOutput { Amount = Genesis.Amount, Receiver = "myPulicKey", Sign = "mySign" } },
             };
-            
-            _transactions = new List<TransactionBlock> 
-            { 
-                Repository.GenesisBlock
+
+            _transactions = new List<TransactionBlock>
+            {
+                Genesis.Block
             };
 
             _repositoryMock = new Mock<IRepository>();
@@ -37,8 +37,8 @@ namespace Balubas.Tests
                 .Setup(repository => repository.GetEnumerator())
                 .Returns(() => _transactions.GetEnumerator());
             _repositoryMock
-                .Setup(repository => repository.Get(Repository.GenesisBlock.Hash))
-                .Returns(Repository.GenesisBlock);
+                .Setup(repository => repository.Get(Genesis.Hash))
+                .Returns(Genesis.Block);
 
             _cryptoMock = new Mock<ICryptoHandler>();
             _cryptoMock

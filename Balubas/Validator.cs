@@ -52,7 +52,7 @@ namespace Balubas
                 totalAmountOut += output.Amount;
             }
             var genesisBlock = _repository.First();
-            if (!_cryptoHandler.Verify(genesisBlock.GetHashData(), genesisBlock.Sign, Repository.GenesisBlockPublicKey))
+            if (!_cryptoHandler.Verify(genesisBlock.GetHashData(), genesisBlock.Sign, Genesis.PublicKey))
             {
                 throw new ApplicationException("First block has to be the genesis block.");
             }

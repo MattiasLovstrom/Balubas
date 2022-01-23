@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31829.152
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{201B5F47-E6A0-420E-BB68-575C45619144}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Balubas", "Balubas\Balubas.csproj", "{69C0ACAF-9172-4EAF-894C-EC16A9B7A3A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BalubasTests", "BalubasTests\BalubasTests.csproj", "{D7B96275-FF6F-4FED-A822-88A9FCBD1831}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69C0ACAF-9172-4EAF-894C-EC16A9B7A3A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C0ACAF-9172-4EAF-894C-EC16A9B7A3A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C0ACAF-9172-4EAF-894C-EC16A9B7A3A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C0ACAF-9172-4EAF-894C-EC16A9B7A3A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7B96275-FF6F-4FED-A822-88A9FCBD1831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B96275-FF6F-4FED-A822-88A9FCBD1831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B96275-FF6F-4FED-A822-88A9FCBD1831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B96275-FF6F-4FED-A822-88A9FCBD1831}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1360AF92-FDF5-4271-B9D8-A0AB27FF3778}
+	EndGlobalSection
+EndGlobal

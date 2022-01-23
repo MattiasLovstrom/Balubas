@@ -14,7 +14,7 @@ namespace Balubas
         {
             PreviousHash = null,
             Hash = GenesisHash,
-            Inputs = new string[0],
+            Inputs = new TransactionInput[0],
             Outputs = new[]
             {
                 new TransactionOutput
@@ -49,15 +49,12 @@ namespace Balubas
             if (block.Hash != _cryptoHandler.CalculateHash(block)) throw new ApplicationException("Wrong hash.");
             if (!block.Outputs.Any()) throw new ApplicationException("Transactions needs to have outputs.");
             if (!block.Inputs.Any()) throw new ApplicationException("A block need to have inputs.");
-            foreach (var inputHash in block.Inputs)
+            foreach (var input in block.Inputs)
             {
-                var input = Get(inputHash);
-                foreach (var transactionOutput in input.Outputs)
+                var inputBlock = Get(input.Hash);
+                if (!_cryptoHandler.Verify(block.GetHashData(), block.Sign, inputBlock.Outputs[input.Row].Receiver))
                 {
-                    if (!_cryptoHandler.Verify(block.GetHashData(), block.Sign, transactionOutput.Receiver))
-                    {
-                        throw new ApplicationException("Can't verify transaction.");
-                    }
+                    throw new ApplicationException("Can't verify transaction.");
                 }
             }
             //output amount must be queual to input amount
@@ -83,7 +80,7 @@ namespace Balubas
                         yield return b;
                     }
                 }
-                
+
             }
         }
 
@@ -92,7 +89,10 @@ namespace Balubas
             foreach (var block in this)
             {
                 if (block.Inputs == null) continue;
-                if (block.Inputs.Contains(hash)) return true;
+                foreach (var transactionInput in block.Inputs)
+                {
+                    if (transactionInput.Hash == hash) return true;
+                }
             }
 
             return false;

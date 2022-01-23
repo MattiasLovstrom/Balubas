@@ -56,8 +56,7 @@ namespace BlockChainTest.Tests
             Assert.AreEqual(2, transaction.Outputs.Count());
             Assert.AreEqual(90.0, transaction.Outputs.First().Amount);
             Assert.AreEqual(10.0, transaction.Outputs.Skip(1).First().Amount);
-            Assert.AreEqual("Hash1", transaction.Inputs.First());
-            Assert.AreEqual("Hash1", transaction.Inputs.First());
+            Assert.AreEqual("Hash1", transaction.Inputs.First().Hash);
             Assert.AreEqual(wallet.PublicKey, transaction.Outputs.First().Receiver);
             Assert.AreEqual("wallet2", transaction.Outputs.Skip(1).First().Receiver);
         }

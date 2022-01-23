@@ -33,13 +33,13 @@ namespace Balubas
 
         public TransactionBlock Send(double amount, string walletId)
         {
-            var inputs = new List<string>();
+            var inputs = new List<TransactionInput>();
             var collectedAmount = 0.0;
             foreach (var transaction in UnspentTransactions)
             {
                 foreach (var transactionOutput in transaction.Outputs)
                 {
-                    inputs.Add(transaction.Hash);
+                    inputs.Add(new TransactionInput{ Hash = transaction.Hash});
                     collectedAmount += transactionOutput.Amount;
                     if (collectedAmount >= amount) break;
                 }
@@ -64,8 +64,8 @@ namespace Balubas
 
             return new TransactionBlock
             {
-                Inputs = inputs,
-                Outputs = outputs
+                Inputs = inputs.ToArray(),
+                Outputs = outputs.ToArray()
             };
         }
 

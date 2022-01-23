@@ -13,8 +13,8 @@ namespace Balubas
         public ulong Nonce { get; set; }
         public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
         //need to have rowNr
-        public IEnumerable<string> Inputs { get; set; }
-        public IEnumerable<TransactionOutput> Outputs { get; set; }
+        public TransactionInput[] Inputs { get; set; }
+        public TransactionOutput[] Outputs { get; set; }
         public string Sign { get; set; }
 
 
@@ -25,7 +25,7 @@ namespace Balubas
                 .Append(Nonce)
                 .Append(TimeStamp)
                 .Append(Outputs.Select(o=>o.GetHashData()).Aggregate((c, n) => c + "," + n))
-                .Append(Inputs != null ? Inputs.Aggregate((c, n) => c + "," + n) : "");
+                .Append(Inputs.Select(o=>o.GetHashData()).Aggregate((c, n) => c + "," + n));
 
             return message.ToString();
         }
@@ -36,9 +36,10 @@ namespace Balubas
             var message = new StringBuilder("[");
             message.Append(nameof(PreviousHash)).Append("=").Append(PreviousHash?.Substring(0, 6) ?? "[null]").Append(", ");
             message.Append(nameof(Hash)).Append("=").Append(Hash?.Substring(0, 6) ?? "[null]").Append(", ");
-            if (Inputs != null && Inputs.Any())
+            message.Append(nameof(Inputs)).Append("=");
+            foreach (var transactionInput in Inputs)
             {
-                message.Append(nameof(Inputs)).Append("=").Append(Inputs.Select(t => t.Substring(0, 6)).Aggregate((c, n) => c + "," + n)).Append(", ");
+                message.Append(transactionInput);
             }
 
             message.Append(nameof(Outputs)).Append("=");

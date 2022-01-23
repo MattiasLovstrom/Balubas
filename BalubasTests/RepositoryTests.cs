@@ -56,10 +56,10 @@ namespace BlockChainTest.Tests
         {
             var testObject = new Repository(_cryptoMock.Object);
             var block1 = TransactionBlockTests.CreateBlock();
-            block1.Outputs = new[] { new TransactionOutput { Receiver = "myWalletId" } };
+            block1.Outputs = new[] { new TransactionOutput { Amount = Repository.GenesisAmount, Receiver = "myWalletId" } };
             testObject.Add(block1);
             var block2 = TransactionBlockTests.CreateBlock(block1.Hash);
-            block2.Outputs = new[] { new TransactionOutput { Receiver = "myWalletId" } };
+            block2.Outputs = new[] { new TransactionOutput { Amount = Repository.GenesisAmount, Receiver = "myWalletId" } };
             testObject.Add(block2);
 
             Assert.AreEqual(2, testObject.TransactionsTo("myWalletId").Count());
@@ -70,10 +70,10 @@ namespace BlockChainTest.Tests
         {
             var testObject = new Repository(_cryptoMock.Object);
             var transaction1 = TransactionBlockTests.CreateBlock();
-            transaction1.Outputs = new [] {new TransactionOutput {Receiver = "myWalletId"}};
+            transaction1.Outputs = new [] {new TransactionOutput { Amount = Repository.GenesisAmount, Receiver = "myWalletId"}};
             testObject.Add(transaction1);
             var transaction2 = TransactionBlockTests.CreateBlock(transaction1.Hash);
-            transaction2.Outputs = new[] { new TransactionOutput { Receiver = "myWalletId" } };
+            transaction2.Outputs = new[] { new TransactionOutput { Amount = Repository.GenesisAmount, Receiver = "myWalletId" } };
             testObject.Add(transaction2);
 
             var transactionsTo = testObject.TransactionsTo("myWalletId");
@@ -87,6 +87,7 @@ namespace BlockChainTest.Tests
             var testObject = new Repository(_cryptoMock.Object);
 
             var unspent = TransactionBlockTests.CreateBlock();
+            unspent.Inputs = new[] { new TransactionInput { Hash = Repository.GenesisBlockPublicKey, Row = 0} };
             unspent.Outputs = new[] { new TransactionOutput { Amount = 10, Receiver = "PublicKey" } };
             testObject.Add(unspent);
 

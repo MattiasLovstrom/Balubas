@@ -10,17 +10,23 @@ namespace Balubas
     public class Repository : IEnumerable<TransactionBlock>, IBlockChain
     {
         public const string GenesisHash = "0000000000000000000";
+        public const string GenesisBlockPublicKey = "22J9pZ1JEBrDxhrdojPUEc4aQPz7mAHmJN9vAL7xN41QTD2HYPne2Trus6j3CDQe6safsAZk9WEkXN1Xjhxh65X22cZLAP2uuMp";
+        public const double GenesisAmount = 1000000;
+
         public static readonly TransactionBlock GenesisBlock = new TransactionBlock
         {
             PreviousHash = null,
             Hash = GenesisHash,
-            Inputs = new TransactionInput[0],
+            Inputs = new []
+            {
+                new TransactionInput{Hash = GenesisHash, Row = 0}, 
+            },
             Outputs = new[]
             {
                 new TransactionOutput
                 {
-                    Receiver = "22J9pZ1JEBrDxhrdojPUEc4aQPz7mAHmJN9vAL7xN41QTD2HYPne2Trus6j3CDQe6safsAZk9WEkXN1Xjhxh65X22cZLAP2uuMp",
-                    Amount = 1000000,
+                    Receiver = GenesisBlockPublicKey,
+                    Amount = GenesisAmount,
                     Sign = ""
                 }
             },
@@ -49,6 +55,7 @@ namespace Balubas
             if (block.Hash != _cryptoHandler.CalculateHash(block)) throw new ApplicationException("Wrong hash.");
             if (!block.Outputs.Any()) throw new ApplicationException("Transactions needs to have outputs.");
             if (!block.Inputs.Any()) throw new ApplicationException("A block need to have inputs.");
+            var totalAmountIn = 0d;
             foreach (var input in block.Inputs)
             {
                 var inputBlock = Get(input.Hash);
@@ -56,9 +63,20 @@ namespace Balubas
                 {
                     throw new ApplicationException("Can't verify transaction.");
                 }
+
+                totalAmountIn += inputBlock.Outputs[input.Row].Amount;
             }
-            //output amount must be queual to input amount
-            //first block must be genisis block 
+            var totalAmountOut = 0d;
+            foreach (var output in block.Outputs)
+            {
+                totalAmountOut += output.Amount;
+            }
+            if (totalAmountOut != totalAmountIn) throw new ApplicationException("Input amount and output amount don't match.");
+            var genesisBlock = this.First();
+            if (!_cryptoHandler.Verify(genesisBlock.GetHashData(), genesisBlock.Sign, GenesisBlockPublicKey))
+            {
+                throw new ApplicationException("First block has to be the genesis block.");
+            }
 
             _last = block;
             _repository.Add(block.Hash, block);

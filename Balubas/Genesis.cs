@@ -14,7 +14,7 @@ namespace Balubas
             Hash = Hash,
             Inputs = new[]
             {
-                new TransactionInput{Hash = Hash, Row = 0}
+                new TransactionInput{ Hash = Hash, Row = 0}
             },
             Outputs = new[]
             {
@@ -26,7 +26,8 @@ namespace Balubas
                 }
             },
             Nonce = 0,
-            TimeStamp = new DateTime(2022, 01, 21)
+            TimeStamp = new DateTime(2022, 01, 21),
+            Sign = ""
         };
     }
 }

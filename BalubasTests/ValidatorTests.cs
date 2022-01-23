@@ -25,6 +25,7 @@ namespace Balubas.Tests
                 PreviousHash = Genesis.Hash,
                 Inputs = new[] { new TransactionInput { Hash = Genesis.Hash, Row = 0 } },
                 Outputs = new[] { new TransactionOutput { Amount = Genesis.Amount, Receiver = "myPulicKey", Sign = "mySign" } },
+                Sign = "mySign"
             };
 
             _transactions = new List<TransactionBlock>
@@ -62,9 +63,36 @@ namespace Balubas.Tests
         [ExpectedException(typeof(ApplicationException))]
         public void ValidateWrongPreviousHashTest()
         {
+            _transaction.PreviousHash = "wrong";
+            _testObject.Validate(_transaction);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void ValidateWrongHashTest()
+        {
             _transaction.Hash = "wrong";
             _testObject.Validate(_transaction);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void ValidateWrongReferredInputTest()
+        {
+            _transaction.Inputs = new[] { new TransactionInput { Hash = "wrong", Row = 0 } };
+            _testObject.ValidateInputs(_transaction);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void ValidateWrongSignedInputTest()
+        {
+            _cryptoMock
+               .Setup(crypto => crypto.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+               .Returns(false);
+            _testObject.ValidateInputs(_transaction);
+        }
+
 
     }
 }

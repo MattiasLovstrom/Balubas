@@ -20,9 +20,11 @@ namespace Balubas
         {
             if (block.PreviousHash != _repository.First().Hash) throw new ApplicationException($"Wrong sequence hash, previous hash expected {_repository.First().Hash} but was {block.PreviousHash}.");
             if (block.Hash != _cryptoHandler.CalculateHash(block)) throw new ApplicationException("Wrong hash.");
+            if (string.IsNullOrEmpty(block.Sign)) throw new ApplicationException("Block needs to be signed.");
             var totalAmountIn = ValidateInputs(block);
             var totalAmountOut = ValidateOutputs(block);
             if (totalAmountOut != totalAmountIn) throw new ApplicationException("Input amount and output amount don't match.");
+            ValidateChain();
         }
 
         public double ValidateInputs(TransactionBlock block)
@@ -51,14 +53,17 @@ namespace Balubas
             {
                 totalAmountOut += output.Amount;
             }
+            
+            return totalAmountOut;
+        }
+
+        public void ValidateChain()
+        {
             var genesisBlock = _repository.First();
             if (!_cryptoHandler.Verify(genesisBlock.GetHashData(), genesisBlock.Sign, Genesis.PublicKey))
             {
                 throw new ApplicationException("First block has to be the genesis block.");
             }
-
-            return totalAmountOut;
         }
-
     }
 }

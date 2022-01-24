@@ -7,7 +7,6 @@ namespace Balubas
 {
     public class Repository : IRepository
     {
-        private readonly ICryptoHandler _cryptoHandler;
         private readonly IValidator _validator;
         private TransactionBlock _last;
 
@@ -21,8 +20,7 @@ namespace Balubas
         public Repository(
             ICryptoHandler cryptoHandler)
         {
-            _cryptoHandler = cryptoHandler;
-            _validator = new Validator(this, _cryptoHandler);
+            _validator = new Validator(this, cryptoHandler);
             _last = _repository[Genesis.Hash];
         }
 
@@ -30,7 +28,7 @@ namespace Balubas
             ICryptoHandler cryptoHandler, 
             IValidator validator)
         {
-            _cryptoHandler = cryptoHandler;
+            var cryptoHandler1 = cryptoHandler;
             _validator = validator;
             _last = _repository[Genesis.Hash];
         }

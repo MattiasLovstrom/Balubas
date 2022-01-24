@@ -59,7 +59,7 @@ namespace Balubas
 
         public void ValidateChain()
         {
-            var genesisBlock = _repository.First();
+            var genesisBlock = _repository.Last();
             if (!_cryptoHandler.Verify(genesisBlock.GetHashData(), genesisBlock.Sign, Genesis.PublicKey))
             {
                 throw new ApplicationException("First block has to be the genesis block.");

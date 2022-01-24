@@ -18,7 +18,7 @@ namespace Balubas
         {
             var message = new StringBuilder("[");
 
-            message.Append(nameof(Hash)).Append("=").Append(Hash);
+            message.Append(nameof(Hash)).Append("=").Append(Hash?.Substring(0, 6) ?? "[null]").Append(", ");
             message.Append(nameof(Row)).Append("=").Append(Row);
             message.Append("]");
 

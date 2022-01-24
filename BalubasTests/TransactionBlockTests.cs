@@ -15,8 +15,9 @@ namespace BlockChainTest.Tests
             Assert.IsFalse(block.GetHashData().Contains("myHash"));
         }
 
-        public static TransactionBlock CreateBlock(string previousHash = Genesis.Hash)
+        public static TransactionBlock CreateBlock(string previousHash = null)
         {
+            previousHash ??= Genesis.Hash;
             var block = new TransactionBlock();
             block.Hash = block.GetHashCode().ToString();
             block.PreviousHash = previousHash;

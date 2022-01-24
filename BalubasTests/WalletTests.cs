@@ -38,7 +38,7 @@ namespace BlockChainTest.Tests
             var wallet = new Wallet(_repositoryMock.Object, _cryptoMock.Object);
             var wallet2 = new Wallet(_repositoryMock.Object, _cryptoMock.Object);
 
-            var transaction = wallet.Send(100, wallet2.PublicKey);
+            var transaction = wallet.CreateTransaction(100, wallet2.PublicKey);
             Assert.AreEqual(1, transaction.Outputs.Count());
             Assert.AreEqual(100.0, transaction.Outputs.First().Amount);
             Assert.AreEqual(1, transaction.Inputs.Count());
@@ -52,7 +52,7 @@ namespace BlockChainTest.Tests
         {
             var wallet = new Wallet(_repositoryMock.Object,_cryptoMock.Object);
 
-            var transaction = wallet.Send(10, "wallet2");
+            var transaction = wallet.CreateTransaction(10, "wallet2");
             Assert.AreEqual(2, transaction.Outputs.Count());
             Assert.AreEqual(90.0, transaction.Outputs.First().Amount);
             Assert.AreEqual(10.0, transaction.Outputs.Skip(1).First().Amount);

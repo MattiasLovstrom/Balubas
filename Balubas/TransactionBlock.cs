@@ -45,6 +45,8 @@ namespace Balubas
             {
                 message.Append(transactionOutput);
             }
+
+            message.Append(", ");
             message.Append(nameof(TimeStamp)).Append("=").Append(TimeStamp.ToString("yyMMdd:Hmm"));
             message.Append("]");
             return message.ToString();

@@ -34,7 +34,7 @@ namespace Balubas
             wallet.PublicKey = keys[1];
             var fileName = $"{name}.wallet";
             if (File.Exists(fileName)) throw new ApplicationException($"Wallet already exists {fileName}");
-            File.WriteAllText(fileName, JsonSerializer.Serialize(wallet));
+            File.WriteAllText(fileName, JsonSerializer.Serialize(wallet, new JsonSerializerOptions { WriteIndented = true }));
             Console.Out.WriteLine($"Created wallet: {fileName}");
         }
 

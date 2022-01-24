@@ -4,8 +4,8 @@ namespace Balubas
 {
     public static class Genesis
     {
-        public const string Hash = "0000000000000000000";
-        public const string PublicKey = "22J9pZ1JEBrDxhrdojPUEc4aQPz7mAHmJN9vAL7xN41QTD2HYPne2Trus6j3CDQe6safsAZk9WEkXN1Xjhxh65X22cZLAP2uuMp";
+        public static string Hash = "0000000000000000000";
+        public static string PublicKey = "22J9pZ1JEBrDxhrdojPUEc4aQPz7mAHmJN9vAL7xN41QTD2HYPne2Trus6j3CDQe6safsAZk9WEkXN1Xjhxh65X22cZLAP2uuMp";
         public const double Amount = 1000000;
 
         public static readonly TransactionBlock Block = new TransactionBlock
@@ -14,7 +14,7 @@ namespace Balubas
             Hash = Hash,
             Inputs = new[]
             {
-                new TransactionInput{ Hash = Hash, Row = 0}
+                new TransactionInput{ Hash = "-------", Row = 0}
             },
             Outputs = new[]
             {

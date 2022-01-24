@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -37,6 +38,7 @@ namespace Balubas
 
         public string Sign(string data, string privateKey)
         {
+            Console.Out.WriteLine("Sign:" + data);
             var key = CngKey.Import(FromBase58(privateKey), CngKeyBlobFormat.EccPrivateBlob);
             var dsa = new ECDsaCng(key); 
             
@@ -45,6 +47,7 @@ namespace Balubas
 
         public bool Verify(string data, string signature, string publicKey)
         {
+            Console.Out.WriteLine("Verify:" + data);
             var key = CngKey.Import(FromBase58(publicKey), CngKeyBlobFormat.EccPublicBlob);
             var dsa = new ECDsaCng(key); 
 

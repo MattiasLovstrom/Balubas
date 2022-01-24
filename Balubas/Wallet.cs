@@ -8,14 +8,14 @@ namespace Balubas
 {
     public class Wallet
     {
-        private readonly IRepository _blockChain;
+        private readonly IRepository _repository;
         private readonly ICryptoHandler _crypto;
 
         public Wallet(
             IRepository repository,
             ICryptoHandler crypto)
         {
-            _blockChain = repository;
+            _repository = repository;
             _crypto = crypto;
             var keys = _crypto.CreatePrivatePublicKeys();
             PrivateKey = keys[0];
@@ -28,10 +28,10 @@ namespace Balubas
         public string PublicKey { get; set; }
         [JsonIgnore]
         public IEnumerable<TransactionBlock> UnspentTransactions =>
-            _blockChain.TransactionsTo(PublicKey)
-                .Where(transaction => !_blockChain.IsUsed(transaction.Hash));
+            _repository.TransactionsTo(PublicKey)
+                .Where(transaction => !_repository.IsUsed(transaction.Hash));
 
-        public TransactionBlock Send(double amount, string walletId)
+        public TransactionBlock CreateTransaction(double amount, string walletId)
         {
             var inputs = new List<TransactionInput>();
             var collectedAmount = 0.0;
@@ -62,11 +62,15 @@ namespace Balubas
                 Receiver = walletId
             });
 
-            return new TransactionBlock
+            var transactionBlock = new TransactionBlock
             {
+                PreviousHash = _repository.First().Hash,
                 Inputs = inputs.ToArray(),
                 Outputs = outputs.ToArray()
             };
+            transactionBlock.Hash = _crypto.CalculateHash(transactionBlock);
+            transactionBlock.Sign = _crypto.Sign(transactionBlock.GetHashData(), PrivateKey);
+            return transactionBlock;
         }
 
         public override string ToString()

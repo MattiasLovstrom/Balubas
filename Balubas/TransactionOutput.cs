@@ -22,7 +22,7 @@ namespace Balubas
 
             message.Append(nameof(Amount)).Append("=").Append(Amount).Append(", ");
             message.Append(nameof(Receiver)).Append("=").Append(Receiver?.Substring(Receiver.Length - 6) ?? "[null]").Append(", ");
-            message.Append(nameof(Sign)).Append("=").Append(Sign).Append(", ");
+            message.Append(nameof(Sign)).Append("=").Append(Sign?.Substring(0, 6) ?? "[null]");
             message.Append("]");
             return message.ToString();
         }

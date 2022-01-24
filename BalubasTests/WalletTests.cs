@@ -24,6 +24,13 @@ namespace BlockChainTest.Tests
                 .Setup(crypto => crypto.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(true);
             _repositoryMock = new Mock<IRepository>();
+            var transactions = new List<TransactionBlock>
+            {
+                Genesis.Block
+            };
+            _repositoryMock
+                .Setup(repository => repository.GetEnumerator())
+                .Returns(() => transactions.GetEnumerator());
             _repositoryMock
                 .Setup(chain => chain.TransactionsTo(It.IsAny<string>()))
                 .Returns(new List<TransactionBlock>
@@ -39,9 +46,9 @@ namespace BlockChainTest.Tests
             var wallet2 = new Wallet(_repositoryMock.Object, _cryptoMock.Object);
 
             var transaction = wallet.CreateTransaction(100, wallet2.PublicKey);
-            Assert.AreEqual(1, transaction.Outputs.Count());
+            Assert.AreEqual(1, transaction.Outputs.Length);
             Assert.AreEqual(100.0, transaction.Outputs.First().Amount);
-            Assert.AreEqual(1, transaction.Inputs.Count());
+            Assert.AreEqual(1, transaction.Inputs.Length);
             Assert.AreEqual(wallet2.PublicKey, transaction.Outputs.First().Receiver);
         }
 
@@ -53,12 +60,12 @@ namespace BlockChainTest.Tests
             var wallet = new Wallet(_repositoryMock.Object,_cryptoMock.Object);
 
             var transaction = wallet.CreateTransaction(10, "wallet2");
-            Assert.AreEqual(2, transaction.Outputs.Count());
-            Assert.AreEqual(90.0, transaction.Outputs.First().Amount);
-            Assert.AreEqual(10.0, transaction.Outputs.Skip(1).First().Amount);
-            Assert.AreEqual("Hash1", transaction.Inputs.First().Hash);
-            Assert.AreEqual(wallet.PublicKey, transaction.Outputs.First().Receiver);
-            Assert.AreEqual("wallet2", transaction.Outputs.Skip(1).First().Receiver);
+            Assert.AreEqual(2, transaction.Outputs.Length);
+            Assert.AreEqual(90.0, transaction.Outputs[0].Amount);
+            Assert.AreEqual(10.0, transaction.Outputs[1].Amount);
+            Assert.AreEqual("Hash1", transaction.Inputs[0].Hash);
+            Assert.AreEqual(wallet.PublicKey, transaction.Outputs[0].Receiver);
+            Assert.AreEqual("wallet2", transaction.Outputs[1].Receiver);
         }
 
         //[TestMethod]

@@ -18,12 +18,7 @@ namespace Balubas
             },
             Outputs = new[]
             {
-                new TransactionOutput
-                {
-                    Receiver = PublicKey,
-                    Amount = Amount,
-                    Sign = ""
-                }
+                new TransactionOutput { Receiver = PublicKey, Amount = Amount, Sign = "" }
             },
             Nonce = 0,
             TimeStamp = new DateTime(2022, 01, 21),

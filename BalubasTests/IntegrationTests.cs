@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Balubas;
+﻿using Balubas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace BalubasTests
 {
@@ -46,7 +44,7 @@ namespace BalubasTests
         }
 
         [TestMethod]
-        public void SendTest()
+        public void CreateTransactionTest()
         {
             Console.Out.WriteLine("Repository:\n" + _repository);
             var transaction = _initialWallet.CreateTransaction(10, _wallet2.PublicKey);

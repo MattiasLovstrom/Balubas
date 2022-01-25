@@ -28,7 +28,6 @@ namespace Balubas
             ICryptoHandler cryptoHandler, 
             IValidator validator)
         {
-            var cryptoHandler1 = cryptoHandler;
             _validator = validator;
             _last = _repository[Genesis.Hash];
         }
@@ -43,7 +42,9 @@ namespace Balubas
 
         public TransactionBlock Get(string hash)
         {
-            return _repository[hash];
+            return _repository.ContainsKey(hash)
+                ? _repository[hash]
+                : null;
         }
 
         public IEnumerable<TransactionBlock> TransactionsTo(string walletId)
@@ -57,7 +58,6 @@ namespace Balubas
                         yield return b;
                     }
                 }
-
             }
         }
 

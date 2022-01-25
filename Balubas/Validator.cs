@@ -18,7 +18,7 @@ namespace Balubas
 
         public void Validate(TransactionBlock block)
         {
-            if (block.PreviousHash != _repository.First().Hash) throw new ApplicationException($"Wrong sequence hash, previous hash expected {_repository.First().Hash} but was {block.PreviousHash}.");
+            if (block.PreviousHash != _repository.FirstOrDefault()?.Hash) throw new ApplicationException($"Wrong sequence hash, previous hash expected {_repository.First().Hash} but was {block.PreviousHash}.");
             if (block.Hash != _cryptoHandler.CalculateHash(block)) throw new ApplicationException("Wrong hash.");
             if (string.IsNullOrEmpty(block.Sign)) throw new ApplicationException("Block needs to be signed.");
             var totalAmountIn = ValidateInputs(block);
@@ -59,7 +59,7 @@ namespace Balubas
 
         public void ValidateChain()
         {
-            var genesisBlock = _repository.Last();
+             var genesisBlock = _repository.Last();
             if (!_cryptoHandler.Verify(genesisBlock.GetHashData(), genesisBlock.Sign, Genesis.PublicKey))
             {
                 throw new ApplicationException("First block has to be the genesis block.");

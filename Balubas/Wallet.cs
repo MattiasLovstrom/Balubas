@@ -11,6 +11,9 @@ namespace Balubas
         private readonly IRepository _repository;
         private readonly ICryptoHandler _crypto;
 
+        public Wallet()
+        { }
+
         public Wallet(
             IRepository repository,
             ICryptoHandler crypto)

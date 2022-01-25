@@ -2,7 +2,7 @@
   "profiles": {
     "Balubas": {
       "commandName": "Project",
-      "commandLineArgs": "send initial 22J9pZ1JEBr9Zg7grCtukbhzT1HM9VGjn9KLUxsZGyUaPAfgXR9WnXw62n8S9o7z4oW9vEdqdoQULheieTL2siec2CLBrCWEEvJ 100000"
+      "commandLineArgs": "balance initial"
     }
   }
 }

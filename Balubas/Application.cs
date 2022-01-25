@@ -14,13 +14,26 @@ namespace Balubas
         private readonly IRepository _repository;
         private readonly IRepository _localStorage;
         private readonly ISynchronizer _synchronizer;
+        private WebStorage _webStorage;
 
         public Application()
         {
             _crypto = new CryptoHandler();
             _repository = new Repository(_crypto);
             _localStorage = new LocalStorage(_crypto);
-            _synchronizer = new Synchronizer(_repository, _localStorage);
+            var repositories = new List<IRepository> { _repository, _localStorage};
+            try
+            {
+                _webStorage = new WebStorage(_crypto);
+                var _ = _webStorage.First();
+                repositories.Add(_webStorage);
+            }
+            catch
+            {
+                Console.Out.WriteLine($"Can't connect to to web repository {WebStorage.Url}");
+            }
+
+            _synchronizer = new Synchronizer(repositories);
         }
 
         public Application(
@@ -133,6 +146,11 @@ namespace Balubas
             Console.Out.WriteLine($"public static string {nameof(Genesis.TransactionReceiver)} = \"{initialWallet.PublicKey}\";");
 
             Console.Out.WriteLine(JsonSerializer.Serialize(Genesis.Block, new JsonSerializerOptions { WriteIndented = true }));
+        }
+
+        public void StartServer()
+        {
+            new Api(_repository, new Synchronizer(new[] { _repository, _localStorage}));
         }
     }
 }

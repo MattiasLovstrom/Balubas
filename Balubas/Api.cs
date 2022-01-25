@@ -1,85 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Balubas
 {
     public class Api
     {
-        public static string url = "http://localhost:1050/";
-        public static HttpListener listener;
-        public static int pageViews = 0;
-        public static int requestCount = 0;
-        public static string pageData =
-            "<!DOCTYPE>" +
-            "<html>" +
-            "  <head>" +
-            "    <title>HttpListener Example</title>" +
-            "  </head>" +
-            "  <body>" +
-            "    <p>Page Views: {0}</p>" +
-            "    <form method=\"post\" action=\"shutdown\">" +
-            "      <input type=\"submit\" value=\"Shutdown\" {1}>" +
-            "    </form>" +
-            "  </body>" +
-            "</html>";
+        private readonly IRepository _repository;
+        private readonly ISynchronizer _synchronizer;
 
-        public Api()
+        public HttpListener Listener;
+       
+        public Api(IRepository repository, ISynchronizer synchronizer)
         {
-            var listener = new HttpListener();
-            listener.Prefixes.Add(url);
-            listener.Start();
-            Console.WriteLine("Listening for connections on {0}", url);
-            Task listenTask = HandleIncomingConnections();
-            listenTask.GetAwaiter().GetResult();
-
-            // Close the listener
-            listener.Close();
-
+            _repository = repository;
+            _synchronizer = synchronizer;
+            Listener = new HttpListener();
+            Listener.Prefixes.Add(WebStorage.Url);
+            Listener.Start();
+            Console.WriteLine("Listening for connections on {0}", WebStorage.Url);
+            HandleIncomingConnections();
+            Listener.Close();
         }
 
-        public static async Task HandleIncomingConnections()
+        public void HandleIncomingConnections()
         {
-            bool runServer = true;
-
-            while (runServer)
+            while (true)
             {
-                // Will wait here until we hear from a connection
-                HttpListenerContext ctx = await listener.GetContextAsync();
-
-                // Peel out the requests and response objects
-                HttpListenerRequest req = ctx.Request;
-                HttpListenerResponse resp = ctx.Response;
-
-                // Print out some info about the request
-                Console.WriteLine("Request #: {0}", ++requestCount);
-                Console.WriteLine(req.Url.ToString());
-                Console.WriteLine(req.HttpMethod);
-                Console.WriteLine(req.UserHostName);
-                Console.WriteLine(req.UserAgent);
-                Console.WriteLine();
-
-                // If `shutdown` url requested w/ POST, then shutdown the server after serving the page
-                if ((req.HttpMethod == "POST") && (req.Url.AbsolutePath == "/shutdown"))
+                Console.Out.WriteLine("Listen");
+                var ctx = Listener.GetContext();
+                var request = ctx.Request;
+                var response = ctx.Response;
+                if (request.HttpMethod == "GET")
                 {
-                    Console.WriteLine("Shutdown requested");
-                    runServer = false;
+                    Console.Out.WriteLine("GET" + request.Url.AbsolutePath);
+                    var hash = request.Url.AbsolutePath.TrimStart('/');
+                    var data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(_repository.Get(hash), new JsonSerializerOptions { WriteIndented = true }));
+                    response.ContentType = "text/html";
+                    response.ContentEncoding = Encoding.UTF8;
+                    response.ContentLength64 = data.LongLength;
+                    response.OutputStream.Write(data, 0, data.Length);
+                    response.Close();
                 }
 
-                // Make sure we don't increment the page views counter if `favicon.ico` is requested
-                
-                // Write the response info
-                string disableSubmit = !runServer ? "disabled" : "";
-                byte[] data = Encoding.UTF8.GetBytes(String.Format(pageData, pageViews, disableSubmit));
-                resp.ContentType = "text/html";
-                resp.ContentEncoding = Encoding.UTF8;
-                resp.ContentLength64 = data.LongLength;
+                if (request.HttpMethod == "POST")
+                {
+                    Console.WriteLine("POST:" + request.Url);
+                    _repository.Add(JsonSerializer.Deserialize<TransactionBlock>(
+                        new StreamReader(request.InputStream).ReadToEnd()));
+                    request.InputStream.Close();
+                    response.StatusCode = 201;
+                    response.Close();
+                }
 
-                // Write out to the response stream (asynchronously), then close it
-                await resp.OutputStream.WriteAsync(data, 0, data.Length);
-                resp.Close();
+                _synchronizer.Synchronize();
             }
         }
     }

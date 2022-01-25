@@ -14,6 +14,7 @@ namespace Balubas
                 else if (args.Length == 4 && args[0] == "send") application.Send(args[1], args[2], args[3]);
                 else if (args.Length == 1 && args[0] == "balance") application.WalletBalance();
                 else if (args.Length == 2 && args[0] == "balance") application.WalletBalance(args[1]);
+                else if (args.Length == 1 && args[0] == "server") application.StartServer();
                 else if (args.Length == 1 && args[0] == "creategenesis") application.CreateGenesis();
                 else
                 {

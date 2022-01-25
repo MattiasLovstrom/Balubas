@@ -42,6 +42,8 @@ namespace Balubas
 
         public TransactionBlock Get(string hash)
         {
+            if (string.IsNullOrEmpty(hash)) return _last;
+
             return _repository.ContainsKey(hash)
                 ? _repository[hash]
                 : null;

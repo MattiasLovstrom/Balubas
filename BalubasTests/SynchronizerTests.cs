@@ -37,7 +37,7 @@ namespace Balubas.Tests
                 .Setup(repository => repository.Get(It.IsAny<string>()))
                 .Returns((string hash) => _repository2List.Any(t => t.Hash == hash) ? new TransactionBlock { Hash = hash } : null);
 
-            _testObject = new Synchronizer(_repository1Mock.Object, _repository2Mock.Object);
+            _testObject = new Synchronizer(new []{_repository1Mock.Object, _repository2Mock.Object});
         }
 
         [TestMethod]

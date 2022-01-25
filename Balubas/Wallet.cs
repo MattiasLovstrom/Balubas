@@ -30,7 +30,7 @@ namespace Balubas
         public string PrivateKey { get; set; }
         public string PublicKey { get; set; }
         [JsonIgnore]
-        public IEnumerable<TransactionBlock> UnspentTransactions =>
+        public IEnumerable<TransactionBlock> UnspentTransactions => 
             _repository.TransactionsTo(PublicKey)
                 .Where(transaction => !_repository.IsUsed(transaction.Hash));
 

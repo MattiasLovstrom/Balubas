@@ -9,29 +9,17 @@ namespace Balubas
     public class LocalStorage : IRepository
     {
         private const string FileName = "balubas.db";
-        private readonly ICryptoHandler _crypto;
         private readonly Validator _validator;
 
         public LocalStorage(
             ICryptoHandler crypto)
         {
-            _crypto = crypto;
-            _validator = new Validator(this, _crypto);
+            _validator = new Validator(this, crypto);
             if (!File.Exists(FileName)) 
             { 
                 File.Create(FileName).Close();
                 File.AppendAllLines(FileName, new[] { JsonSerializer.Serialize(Genesis.Block) });
             }
-        }
-
-        public IEnumerable<TransactionBlock> TransactionsTo(string walletId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool IsUsed(string hash)
-        {
-            throw new System.NotImplementedException();
         }
 
         public TransactionBlock Get(string hash = null)

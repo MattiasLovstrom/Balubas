@@ -47,34 +47,6 @@ namespace Balubas
                 : null;
         }
 
-        public IEnumerable<TransactionBlock> TransactionsTo(string walletId)
-        {
-            foreach (var b in this)
-            {
-                foreach (var transactionOutput in b.Outputs)
-                {
-                    if (transactionOutput.Receiver == walletId)
-                    {
-                        yield return b;
-                    }
-                }
-            }
-        }
-
-        public bool IsUsed(string hash)
-        {
-            foreach (var block in this)
-            {
-                if (block.Inputs == null) continue;
-                foreach (var transactionInput in block.Inputs)
-                {
-                    if (transactionInput.Hash == hash) return true;
-                }
-            }
-
-            return false;
-        }
-
         public IEnumerator<TransactionBlock> GetEnumerator()
         {
             var current = _last;

@@ -19,24 +19,33 @@ namespace BlockChainTest.Tests
             _cryptoMock = new Mock<ICryptoHandler>();
             _cryptoMock
                 .Setup(crypto => crypto.CreatePrivatePublicKeys())
-                .Returns(new[] {"private", "public"});
+                .Returns(new[] { "private", "public" });
             _cryptoMock
                 .Setup(crypto => crypto.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(true);
             _repositoryMock = new Mock<IRepository>();
             var transactions = new List<TransactionBlock>
             {
-                Genesis.Block
+                Genesis.Block,
+                new TransactionBlock {Hash = "Hash1", Outputs = new []{new TransactionOutput {Amount = 100, Receiver = "public"}}}
             };
             _repositoryMock
                 .Setup(repository => repository.GetEnumerator())
                 .Returns(() => transactions.GetEnumerator());
-            _repositoryMock
-                .Setup(chain => chain.TransactionsTo(It.IsAny<string>()))
-                .Returns(new List<TransactionBlock>
-                {
-                    new TransactionBlock {Hash = "Hash1", Outputs = new []{new TransactionOutput {Amount = 100}}}
-                });
+            //_repositoryMock
+            //    .Setup(chain => chain.TransactionsTo(It.IsAny<string>()))
+            //    .Returns(new List<TransactionBlock>
+            //    {
+            //        new TransactionBlock {Hash = "Hash1", Outputs = new []{new TransactionOutput {Amount = 100}}}
+            //    });
+        }
+
+        [TestMethod]
+        public void UnspentTransactionTest()
+        {
+            var wallet = new Wallet(_repositoryMock.Object, _cryptoMock.Object);
+            var unspent = wallet.UnspentTransactions;
+            Assert.AreEqual(1, unspent.Count());
         }
 
         [TestMethod]
@@ -57,7 +66,7 @@ namespace BlockChainTest.Tests
         [TestMethod]
         public void CreateSplittedTransactionTest()
         {
-            var wallet = new Wallet(_repositoryMock.Object,_cryptoMock.Object);
+            var wallet = new Wallet(_repositoryMock.Object, _cryptoMock.Object);
 
             var transaction = wallet.CreateTransaction(10, "wallet2");
             Assert.AreEqual(2, transaction.Outputs.Length);
@@ -79,7 +88,7 @@ namespace BlockChainTest.Tests
         //        Amount = 10,
         //        Receiver = wallet.PublicKey,
         //    }; 
-            
+
         //    _repositoryMock
         //        .Setup(chain => chain.TransactionsTo(It.IsAny<string>()))
         //        .Returns(new List<TransactionBlock> { unspent });

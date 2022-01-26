@@ -19,7 +19,7 @@ namespace Balubas
         public void Validate(TransactionBlock block)
         {
             if (block.PreviousHash != _repository.FirstOrDefault()?.Hash) throw new ApplicationException($"Wrong sequence hash, previous hash expected {_repository.First().Hash} but was {block.PreviousHash}.");
-            if (block.Hash != _cryptoHandler.CalculateHash(block)) throw new ApplicationException("Wrong hash.");
+            if (string.IsNullOrEmpty(block.Hash)) throw new ApplicationException("Hash cant be empty, mine the transaction before add it to the repository.");
             if (string.IsNullOrEmpty(block.Sign)) throw new ApplicationException("Block needs to be signed.");
             var totalAmountIn = ValidateInputs(block);
             var totalAmountOut = ValidateOutputs(block);
@@ -34,9 +34,9 @@ namespace Balubas
             foreach (var input in block.Inputs)
             {
                 var inputBlock = _repository.Get(input.Hash);
-                if (!_cryptoHandler.Verify(block.GetHashData(), block.Sign, inputBlock.Outputs[input.Row].Receiver))
+                if (!_cryptoHandler.Verify(block.GetSigningData(), block.Sign, inputBlock.Outputs[input.Row].Receiver))
                 {
-                    throw new ApplicationException("Can't verify input transactions.");
+                    throw new ApplicationException($"Can't verify input transactions, the block '{block.Hash}' cant be verified with the public key '{inputBlock.Outputs[input.Row].Receiver}'.");
                 }
 
                 totalAmountIn += inputBlock.Outputs[input.Row].Amount;
@@ -61,7 +61,7 @@ namespace Balubas
         public void ValidateChain()
         {
              var genesisBlock = _repository.Last();
-            if (!_cryptoHandler.Verify(genesisBlock.GetHashData(), genesisBlock.Sign, Genesis.PublicKey))
+            if (!_cryptoHandler.Verify(genesisBlock.GetSigningData(), genesisBlock.Sign, Genesis.PublicKey))
             {
                 throw new ApplicationException("First block has to be the genesis block.");
             }

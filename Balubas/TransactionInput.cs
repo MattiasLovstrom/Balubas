@@ -3,12 +3,12 @@ using System.Text;
 
 namespace Balubas
 {
-    public class TransactionInput : IHashData
+    public class TransactionInput : ISigningData
     {
         public string Hash { get; set; }
         public int Row { get; set; }
 
-        public string GetHashData()
+        public string GetSigningData()
         {
             return $"{Hash}{Row}";
         }

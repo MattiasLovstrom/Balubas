@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Balubas;
+using Moq;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Moq;
 
+// ReSharper disable once IdentifierTypo
 namespace Balubas.Tests
 {
     [TestClass()]
@@ -43,7 +42,7 @@ namespace Balubas.Tests
 
             _cryptoMock = new Mock<ICryptoHandler>();
             _cryptoMock
-                .Setup(crypto => crypto.CalculateHash(It.IsAny<IHashData>()))
+                .Setup(crypto => crypto.CalculateHash(It.IsAny<TransactionBlock>()))
                 .Returns("1");
             _cryptoMock
                 .Setup(crypto => crypto.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -71,7 +70,7 @@ namespace Balubas.Tests
         [ExpectedException(typeof(ApplicationException))]
         public void ValidateWrongHashTest()
         {
-            _transaction.Hash = "wrong";
+            _transaction.Hash = "";
             _testObject.Validate(_transaction);
         }
 

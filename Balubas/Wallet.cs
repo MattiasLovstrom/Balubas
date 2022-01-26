@@ -69,8 +69,8 @@ namespace Balubas
                 Inputs = inputs.ToArray(),
                 Outputs = outputs.ToArray()
             };
-            transactionBlock.Hash = _crypto.CalculateHash(transactionBlock);
-            transactionBlock.Sign = _crypto.Sign(transactionBlock.GetHashData(), PrivateKey);
+            //transactionBlock.Hash = _crypto.CalculateHash(transactionBlock);
+            transactionBlock.Sign = _crypto.Sign(transactionBlock.GetSigningData(), PrivateKey);
             return transactionBlock;
         }
 

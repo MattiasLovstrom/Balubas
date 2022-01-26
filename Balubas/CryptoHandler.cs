@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -11,17 +10,24 @@ namespace Balubas
     {
         private readonly byte[] _hashKey = new byte[64];
 
-        public string CalculateHash(IHashData data)
+        public string CalculateHash(TransactionBlock data)
+        {
+            var message = new StringBuilder()
+                .Append(data.PreviousHash)
+                .Append(data.Nonce)
+                .Append(data.TimeStamp)
+                .Append(data.Outputs.Select(o => o.GetSigningData()).Aggregate((c, n) => c + "," + n))
+                .Append(data.Inputs.Select(o => o.GetSigningData()).Aggregate((c, n) => c + "," + n));
+            return CalculateHash(message.ToString());
+        }
+
+        public string CalculateHash(string data)
         {
             using var hmac = new HMACSHA256(_hashKey);
-            //while (!hashString.StartsWith("0"))
-            //{
-                // Data.Nonce++
                 var hashString = ToBase58(
                 hmac.ComputeHash(
-                    Encoding.UTF8.GetBytes(data.GetHashData())));
-            //}
-
+                    Encoding.UTF8.GetBytes(data)));
+            
             return hashString;
         }
 
@@ -67,8 +73,8 @@ namespace Balubas
         public static byte[] FromBase58(string base58)
         {
             var alphabet = Base58Alphabet.ToList();
-            var base58bytes = base58.Select(b => (byte)(alphabet.IndexOf(b))).ToArray();
-            return FromToBase(base58bytes, 58, 256).ToArray();
+            var base58Bytes = base58.Select(b => (byte)(alphabet.IndexOf(b))).ToArray();
+            return FromToBase(base58Bytes, 58, 256).ToArray();
         }
 
         public static IEnumerable<byte> FromToBase(byte[] bytes, int fromBase, int toBase)

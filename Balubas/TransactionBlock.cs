@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Balubas
 {
-    public class TransactionBlock : IHashData
+    public class TransactionBlock : ISigningData
     {
         public string Hash { get; set; }
         public string PreviousHash { get; set; }
@@ -16,14 +16,13 @@ namespace Balubas
         public string Sign { get; set; }
 
 
-        public string GetHashData()
+        public string GetSigningData()
         {
             var message = new StringBuilder()
                 .Append(PreviousHash)
-                .Append(Nonce)
                 .Append(TimeStamp)
-                .Append(Outputs.Select(o=>o.GetHashData()).Aggregate((c, n) => c + "," + n))
-                .Append(Inputs.Select(o=>o.GetHashData()).Aggregate((c, n) => c + "," + n));
+                .Append(Outputs.Select(o=>o.GetSigningData()).Aggregate((c, n) => c + "," + n))
+                .Append(Inputs.Select(o=>o.GetSigningData()).Aggregate((c, n) => c + "," + n));
 
             return message.ToString();
         }

@@ -131,10 +131,10 @@ namespace Balubas
                 Amount = Genesis.Amount,
                 Receiver = initialWallet.PublicKey
             };
-            transactionOutput.Sign = _crypto.Sign(transactionOutput.GetHashData(), genesisWallet.PrivateKey);
+            transactionOutput.Sign = _crypto.Sign(transactionOutput.GetSigningData(), genesisWallet.PrivateKey);
             Genesis.Block.Outputs = new[] { transactionOutput };
             Genesis.Block.Hash = Genesis.Hash = _crypto.CalculateHash(Genesis.Block);
-            Genesis.Block.Sign = _crypto.Sign(Genesis.Block.GetHashData(), genesisWallet.PrivateKey);
+            Genesis.Block.Sign = _crypto.Sign(Genesis.Block.GetSigningData(), genesisWallet.PrivateKey);
 
             Console.Out.WriteLine($"public static string {nameof(Genesis.PublicKey)} = \"{genesisWallet.PublicKey}\";");
             Console.Out.WriteLine($"public static string {nameof(Genesis.Hash)} = \"{Genesis.Hash}\";");

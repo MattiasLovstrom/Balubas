@@ -12,7 +12,7 @@ namespace BlockChainTest.Tests
         {
             var block = TransactionBlockTests.CreateBlock();
             block.Hash = "myHash";
-            Assert.IsFalse(block.GetHashData().Contains("myHash"));
+            Assert.IsFalse(block.GetSigningData().Contains("myHash"));
         }
 
         public static TransactionBlock CreateBlock(string previousHash = null)

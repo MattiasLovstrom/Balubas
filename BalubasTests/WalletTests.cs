@@ -7,7 +7,7 @@ using Moq;
 // ReSharper disable once CheckNamespace
 namespace BlockChainTest.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class WalletTests
     {
         private Mock<IRepository> _repositoryMock;
@@ -32,20 +32,6 @@ namespace BlockChainTest.Tests
             _repositoryMock
                 .Setup(repository => repository.GetEnumerator())
                 .Returns(() => transactions.GetEnumerator());
-            //_repositoryMock
-            //    .Setup(chain => chain.TransactionsTo(It.IsAny<string>()))
-            //    .Returns(new List<TransactionBlock>
-            //    {
-            //        new TransactionBlock {Hash = "Hash1", Outputs = new []{new TransactionOutput {Amount = 100}}}
-            //    });
-        }
-
-        [TestMethod]
-        public void UnspentTransactionTest()
-        {
-            var wallet = new Wallet(_repositoryMock.Object, _cryptoMock.Object);
-            var unspent = wallet.UnspentTransactions;
-            Assert.AreEqual(1, unspent.Count());
         }
 
         [TestMethod]

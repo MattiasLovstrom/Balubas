@@ -4,11 +4,12 @@ namespace Balubas
 {
     public static class Genesis
     {
-        public static string PublicKey = "22J9pZ1JEBrAeNCNyzQVSxwkX1hozgoAdYUo1CdiBF49RYeimcLbUTMjEkoqUmPqAmdDm3rThjykLAw5HHHq6pkLsCbgwhEXesR";
-        public static string Hash = "Agq3oQo9kJWXdhBYbMLFmUCByK8hfK7c9cg3Y6GYvxkr";
-        public static string Sign = "2usnLAWr1MkW8Y9o69GEK7xkunUgGPZXpFuNF4a55H8mNE4CWuZ53iGBwLrjiGoyHhVQDzBCrZ393DU4jXCePeRC";
-        public static string TransactionSign = "2UunEyJB5gbuqFfVYYT7VAyg1b953NKW2M47yEPXDnv4AEiRBamgECyu1Zm2nQVxBM4ESqfRuDdC6p6yuLHLKVqV";
-        public static string TransactionReceiver = "22J9pZ1JEBrCjHxZzBEi2Erj3tQxKTv7KMynYPa1C9hnn9xTySLAu7ps9xYs6EPXwC39qTuAQ1BAqMQYSjGMTenCx6EKf67X3wT"; public const double Amount = 1000000;
+        public static string PublicKey = "22J9pZ1JEBrDFxLGyCPBy6iqiB1HvtwoBvXW2d8a2zJouSg2PyuLTPrbsJeAY6hUGoMHt538Z4RhbwPCFsm9JV96aUyEWx9oXsc";
+        public static string Hash = "BAAug8yCE7ijt5GwyC3BdDxRnhEr4fp8GVgcHQu1QcbN";
+        public static string Sign = "4wdugiP65PBeSMVxt6s83qCyaSQ3GsfWAhPT5R49UMWan4S1y3nGVcHLLd3ETLEXz1ZoVBdYS7tLPn13Z1md7UW6";
+        public static string TransactionSign = "2VMSKw6gkADDME5Mff1TL2FppmJeYDaKgn9XVKHRzidJP1LC2ZATD7gcSgWQCBgUhdxFT5xf5hwsc7iE2pKdkQmv";
+        public static string TransactionReceiver = "22J9pZ1JEBrCRwiAWcUiP1QQefCC2jpA8rq12fyTd93exrn3Kien8FQK7GhCYqyM4Y9rhUJDn1uexRCME5kgjKwmVLJQrQJXZrv"; 
+        public const double Amount = 1000000;
 
         public static readonly TransactionBlock Block = new TransactionBlock
         {
@@ -20,7 +21,7 @@ namespace Balubas
             },
             Outputs = new[]
             {
-                new TransactionOutput { Receiver = TransactionReceiver, Amount = Amount, Sign = TransactionSign }
+                new TransactionOutput { Receiver = TransactionReceiver, Amount = Amount, Row = 0, Sign = TransactionSign }
             },
             Nonce = 0,
             TimeStamp = new DateTime(2022, 01, 21),

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -13,9 +14,14 @@ namespace Balubas
         public string CalculateHash(IHashData data)
         {
             using var hmac = new HMACSHA256(_hashKey);
-            var hashString = ToBase58(
+            //while (!hashString.StartsWith("0"))
+            //{
+                // Data.Nonce++
+                var hashString = ToBase58(
                 hmac.ComputeHash(
                     Encoding.UTF8.GetBytes(data.GetHashData())));
+            //}
+
             return hashString;
         }
 

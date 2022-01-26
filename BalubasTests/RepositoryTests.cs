@@ -79,8 +79,7 @@ namespace BlockChainTest.Tests
             transaction2.Outputs = new[] { new TransactionOutput { Amount = 2, Receiver = "myWalletId" } };
             _testObject.Add(transaction2);
 
-            var transactionsTo = _testObject.TransactionsTo("myWalletId");
-            var unspent = transactionsTo.Where(transaction => !_testObject.IsUsed(transaction.Hash));
+            var unspent = _testObject.UnspentTransactions("myWalletId");
             Assert.AreEqual(1, unspent.Count());
         }
 

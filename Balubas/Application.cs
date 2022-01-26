@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -52,7 +51,7 @@ namespace Balubas
         {
             _synchronizer.Synchronize();
             var myWallet = LoadWallet(walletFriendlyName);
-            var unspent = _repository.TransactionsTo(myWallet.PublicKey).Where(t => !_repository.IsUsed(t.Hash));
+            var unspent = _repository.UnspentTransactions(myWallet.PublicKey);
             var amount = 0d;
             foreach (var transaction in unspent)
             {

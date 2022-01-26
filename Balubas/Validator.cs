@@ -23,7 +23,7 @@ namespace Balubas
             if (string.IsNullOrEmpty(block.Sign)) throw new ApplicationException("Block needs to be signed.");
             var totalAmountIn = ValidateInputs(block);
             var totalAmountOut = ValidateOutputs(block);
-            if (totalAmountOut != totalAmountIn) throw new ApplicationException("Input amount and output amount don't match.");
+            if (!totalAmountOut.Equals(totalAmountIn)) throw new ApplicationException("Input amount and output amount don't match.");
             ValidateChain();
         }
 
@@ -49,9 +49,10 @@ namespace Balubas
         {
             if (!block.Outputs.Any()) throw new ApplicationException("Transactions needs to have outputs.");
             var totalAmountOut = 0d;
-            foreach (var output in block.Outputs)
+            for (var row = 0; row < block.Outputs.Length; row++)
             {
-                totalAmountOut += output.Amount;
+                if (row != block.Outputs[row].Row) throw new ApplicationException("Output rows in wrong order.");
+                totalAmountOut += block.Outputs[row].Amount;
             }
             
             return totalAmountOut;

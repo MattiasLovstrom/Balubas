@@ -1,6 +1,6 @@
 ﻿using Balubas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using System.Diagnostics;
 
 namespace BalubasTests
 {
@@ -21,10 +21,12 @@ namespace BalubasTests
 
             _initialWallet = new Wallet(_repository, _cryptoHandler) 
             {
+                FriendlyName = "initial",
                 PrivateKey = _initialWallet.PrivateKey, 
                 PublicKey = _initialWallet.PublicKey
             };
-            _wallet2 = new Wallet(_repository, _cryptoHandler) { FriendlyName = "Wallet 2" };
+            _wallet2 = new Wallet(_repository, _cryptoHandler) { FriendlyName = "Wallet2" };
+            Trace.TraceInformation("Creating wallet2:" + _wallet2);
         }
 
         private void ManualSetup()
@@ -35,22 +37,50 @@ namespace BalubasTests
             var transactionOutput = new TransactionOutput
             {
                 Amount = Genesis.Amount,
-                Receiver = _initialWallet.PublicKey
+                Receiver = _initialWallet.PublicKey,
+                Row = 0
             };
             transactionOutput.Sign = _cryptoHandler.Sign(transactionOutput.GetHashData(), genesisWallet.PrivateKey);
             Genesis.Block.Outputs = new[] {transactionOutput};
             Genesis.Block.Hash = Genesis.Hash = _cryptoHandler.CalculateHash(Genesis.Block);
             Genesis.Block.Sign = _cryptoHandler.Sign(Genesis.Block.GetHashData(), genesisWallet.PrivateKey);
+
+            Trace.TraceInformation("Creating initial wallet with public key:" + _initialWallet.PublicKey.Substring(_initialWallet.PublicKey.Length - 6));
+            Trace.TraceInformation("Creating Genesis transaction:" + Genesis.Block);
+            
         }
 
         [TestMethod]
         public void CreateTransactionTest()
         {
-            Console.Out.WriteLine("Repository:\n" + _repository);
+            Trace.TraceInformation("Repository:\n" + _repository);
+            
             var transaction = _initialWallet.CreateTransaction(10, _wallet2.PublicKey);
-            Console.Out.WriteLine("Transaction:\n" + transaction);
+            Trace.TraceInformation("Creating transaction from initial to wallet2:\n" + transaction);
             _repository.Add(transaction);
-            Console.Out.WriteLine("Repository:\n" + _repository);
+            Trace.TraceInformation("Repository:\n" + _repository);
+            Trace.TraceInformation(_initialWallet.ToString());
+            Trace.TraceInformation(_wallet2.ToString());
+            var wallet3 = new Wallet(_repository, _cryptoHandler) {FriendlyName = "wallet3"};
+            Trace.TraceInformation("Creating wallet3:" + wallet3);
+            Trace.TraceInformation("Creating to large transaction from wallet2 to wallet3:\n" + transaction);
+            try
+            {
+                transaction = _wallet2.CreateTransaction(11, wallet3.PublicKey);
+                _repository.Add(transaction);
+                Assert.Fail("Should not be able to create transaction for a higher amount then it has");
+            }catch {}
+
+            Trace.TraceInformation("Repository:\n" + _repository);
+            
+            transaction = _wallet2.CreateTransaction(1, wallet3.PublicKey);
+            Trace.TraceInformation("Creating transaction from wallet2 to wallet3:\n" + transaction);
+            _repository.Add(transaction);
+            
+            Trace.TraceInformation(wallet3.ToString());
+
+
+
         }
     }
 }

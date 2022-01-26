@@ -5,10 +5,19 @@ namespace Balubas
 {
     public static class RepositoryExtensions
     {
-        public static bool IsUsed(this IRepository repository, string hash) =>
-            repository
-                .Where(block => block.Inputs != null)
-                .Any(block => block.Inputs.Any(transactionInput => transactionInput.Hash == hash));
+        public static bool IsUsed(this IRepository repository, string hash, int row)
+        {
+            foreach (var block in repository)
+            {
+                if (block.Inputs != null)
+                {
+                    if (block.Inputs.Any(transactionInput => transactionInput.Hash == hash && transactionInput.Row == row)) return true;
+                }
+            }
+
+            return false;
+        }
+
 
         public static IEnumerable<TransactionBlock> TransactionsTo(this IRepository repository, string walletId)
         {
@@ -24,5 +33,16 @@ namespace Balubas
             }
         }
 
+        public static IEnumerable<TransactionBlock> UnspentTransactions(this IRepository repository, string walletPublicKey)
+        {
+            foreach (TransactionBlock transaction in repository.TransactionsTo(walletPublicKey))
+            {
+                foreach (var output in transaction.Outputs)
+                {
+                    if (output.Receiver != walletPublicKey) continue;
+                    if (!repository.IsUsed(transaction.Hash, output.Row)) yield return transaction;
+                }
+            }
+        }
     }
 }

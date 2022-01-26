@@ -39,15 +39,13 @@ namespace Balubas
             {
                 message.Append(transactionInput);
             }
-
+            message.Append(", ");
             message.Append(nameof(Outputs)).Append("=");
             foreach (var transactionOutput in Outputs)
             {
                 message.Append(transactionOutput);
             }
 
-            message.Append(", ");
-            message.Append(nameof(TimeStamp)).Append("=").Append(TimeStamp.ToString("yyMMdd:Hmm"));
             message.Append("]");
             return message.ToString();
         }

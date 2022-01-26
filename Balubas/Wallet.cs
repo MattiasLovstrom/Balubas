@@ -29,20 +29,16 @@ namespace Balubas
         public string FriendlyName { get; set; }
         public string PrivateKey { get; set; }
         public string PublicKey { get; set; }
-        [JsonIgnore]
-        public IEnumerable<TransactionBlock> UnspentTransactions => 
-            _repository.TransactionsTo(PublicKey)
-                .Where(transaction => !_repository.IsUsed(transaction.Hash));
-
         public TransactionBlock CreateTransaction(double amount, string walletId)
         {
             var inputs = new List<TransactionInput>();
             var collectedAmount = 0.0;
-            foreach (var transaction in UnspentTransactions)
+            foreach (var transaction in _repository.UnspentTransactions(PublicKey))
             {
                 foreach (var transactionOutput in transaction.Outputs)
                 {
-                    inputs.Add(new TransactionInput{ Hash = transaction.Hash});
+                    if(transactionOutput.Receiver != PublicKey) continue;
+                    inputs.Add(new TransactionInput{ Hash = transaction.Hash, Row = transactionOutput.Row });
                     collectedAmount += transactionOutput.Amount;
                     if (collectedAmount >= amount) break;
                 }
@@ -57,12 +53,14 @@ namespace Balubas
                 {
                     Amount = collectedAmount - amount,
                     Receiver = PublicKey,
+                    Row = outputs.Count
                 });
             }
             outputs.Add(new TransactionOutput
             {
                 Amount = amount, 
-                Receiver = walletId
+                Receiver = walletId,
+                Row = outputs.Count
             });
 
             var transactionBlock = new TransactionBlock
@@ -78,31 +76,19 @@ namespace Balubas
 
         public override string ToString()
         {
-            var message = new StringBuilder("Wallet (").Append(FriendlyName).Append(") ")
-                .Append(PublicKey.Substring(PublicKey.Length - 6)).Append(" ")
-                .Append(nameof(UnspentTransactions))
+            var message = new StringBuilder("(").Append(FriendlyName).Append(") ")
+                .Append(nameof(PublicKey)).Append("=").Append(PublicKey.Substring(PublicKey.Length - 6)).Append(" ")
+                .Append("UnspentTransactions")
                 .Append("=");
-            var unspentTransactions = UnspentTransactions;
+            var unspentTransactions = _repository.UnspentTransactions(PublicKey).ToArray();
             if (unspentTransactions.Any())
             {
-                message.Append(UnspentTransactions.Select(t => t.ToString()).Aggregate((c, n) => c + ", " + n));
+                message.Append("[");
+                message.Append(unspentTransactions.Select(t => t.ToString()).Aggregate((c, n) => c + ", " + n));
+                message.Append("]");
             }
 
             return message.ToString();
         }
-
-        //public bool Verify(TransactionBlock transaction)
-        //{
-        //    foreach (var inputHash in transaction.Inputs)
-        //    {
-        //        // inputs.reviver = walletId
-        //        var input = _blockChain.Get(inputHash);
-        //        if (input.Receiver != PublicKey) return false;
-        //        // sign must be verified against inputs.Receiver
-        //        if (!_crypto.Verify(input.Receiver, transaction.GetHashData(), transaction.Sign)) return false;
-        //    }
-
-        //    return true;
-        //}
     }
 }

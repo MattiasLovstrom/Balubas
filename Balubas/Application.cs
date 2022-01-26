@@ -51,16 +51,7 @@ namespace Balubas
         {
             _synchronizer.Synchronize();
             var myWallet = LoadWallet(walletFriendlyName);
-            var unspent = _repository.UnspentTransactions(myWallet.PublicKey);
-            var amount = 0d;
-            foreach (var transaction in unspent)
-            {
-                foreach (var myOutput in transaction.Outputs.Where(o => o.Receiver == myWallet.PublicKey))
-                {
-                    amount += myOutput.Amount;
-                }
-            }
-            Console.Out.WriteLine("Balance: " + amount);
+            Console.Out.WriteLine("Balance: " + _repository.UnspentTransactions(myWallet.PublicKey));
         }
 
         public void Send(string walletFriendlyName, string toPublicKey, string amountString)
@@ -107,14 +98,14 @@ namespace Balubas
             return wallet;
         }
 
-        public void CreateWallet(string name)
+        public void CreateWallet(string friendlyName)
         {
-            if (string.IsNullOrEmpty(name?.Trim(' '))) throw new ApplicationException("Can't create a wallet without name.");
+            if (string.IsNullOrEmpty(friendlyName?.Trim(' '))) throw new ApplicationException("Can't create a wallet without name.");
             var wallet = new Wallet(_repository, _crypto);
             var keys = _crypto.CreatePrivatePublicKeys();
             wallet.PrivateKey = keys[0];
             wallet.PublicKey = keys[1];
-            var fileName = $"{name}.wallet";
+            var fileName = $"{friendlyName}.wallet";
             if (File.Exists(fileName)) throw new ApplicationException($"Wallet already exists {fileName}");
             File.WriteAllText(fileName, JsonSerializer.Serialize(wallet, new JsonSerializerOptions { WriteIndented = true }));
             Console.Out.WriteLine($"Created wallet: {fileName}");

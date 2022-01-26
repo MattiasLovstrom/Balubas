@@ -44,5 +44,20 @@ namespace Balubas
                 }
             }
         }
+
+        public static double UnspentAmount(this IRepository repository, string walletPublicKey)
+        {
+            var unspent = UnspentTransactions(repository, walletPublicKey);
+            var amount = 0d;
+            foreach (var transaction in unspent)
+            {
+                foreach (var myOutput in transaction.Outputs.Where(o => o.Receiver == walletPublicKey))
+                {
+                    amount += myOutput.Amount;
+                }
+            }
+
+            return amount;
+        }
     }
 }

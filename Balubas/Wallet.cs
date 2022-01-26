@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Balubas
 {
-    public class Wallet
+    public class Wallet : IWallet
     {
         private readonly IRepository _repository;
         private readonly ICryptoHandler _crypto;

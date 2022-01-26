@@ -16,20 +16,21 @@ namespace Balubas
         public void Synchronize()
         {
             Console.Out.Write("Synchronizing: ");
-            var allInSync = false;
+            //var allInSync = false;
 
-            while (!allInSync)
-            {
-                allInSync = true;
+            //while (!allInSync)
+            //{
+            //    allInSync = true;
                 foreach (var repository1 in _repositories)
                 {
                     foreach (var repository2 in _repositories)
                     {
                         if (repository1 == repository2) continue;
-                        allInSync = allInSync & Synchronize(repository1, repository2);
+                        //allInSync = allInSync & 
+                                    Synchronize(repository1, repository2);
                     }
                 }
-            }
+            //}
 
             Console.Out.WriteLine();
         }

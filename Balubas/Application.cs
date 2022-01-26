@@ -14,23 +14,23 @@ namespace Balubas
         private readonly IRepository _repository;
         private readonly IRepository _localStorage;
         private readonly ISynchronizer _synchronizer;
-        private WebStorage _webStorage;
+        private readonly WebRepository _webStorage;
 
         public Application()
         {
             _crypto = new CryptoHandler();
             _repository = new Repository(_crypto);
-            _localStorage = new LocalStorage(_crypto);
+            _localStorage = new FileRepository(_crypto);
             var repositories = new List<IRepository> { _repository, _localStorage};
             try
             {
-                _webStorage = new WebStorage(_crypto);
+                _webStorage = new WebRepository(_crypto);
                 var _ = _webStorage.First();
                 repositories.Add(_webStorage);
             }
             catch
             {
-                Console.Out.WriteLine($"Can't connect to to web repository {WebStorage.Url}");
+                Console.Out.WriteLine($"Can't connect to to web repository {WebRepository.Url}");
             }
 
             _synchronizer = new Synchronizer(repositories);
@@ -63,8 +63,6 @@ namespace Balubas
             }
             Console.Out.WriteLine("Balance: " + amount);
         }
-
-       
 
         public void Send(string walletFriendlyName, string toPublicKey, string amountString)
         {

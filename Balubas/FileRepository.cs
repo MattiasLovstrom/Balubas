@@ -6,12 +6,12 @@ using System.Text.Json;
 
 namespace Balubas
 {
-    public class LocalStorage : IRepository
+    public class FileRepository : IRepository
     {
         private const string FileName = "balubas.db";
         private readonly Validator _validator;
 
-        public LocalStorage(
+        public FileRepository(
             ICryptoHandler crypto)
         {
             _validator = new Validator(this, crypto);

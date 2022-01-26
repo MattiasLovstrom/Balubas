@@ -6,12 +6,12 @@ using System.Text.Json;
 
 namespace Balubas
 {
-    public class WebStorage : IRepository
+    public class WebRepository : IRepository
     {
         public static string Url = "http://localhost:1050/";
         private readonly Validator _validator;
 
-        public WebStorage(
+        public WebRepository(
             ICryptoHandler crypto)
         {
             _validator = new Validator(this, crypto);
@@ -26,6 +26,8 @@ namespace Balubas
 
         public void Add(TransactionBlock transaction)
         {
+            // todo make this faster 
+            //_validator.Validate(transaction);
             Console.Out.WriteLine("POST" + transaction);
             using var client = new WebClient();
             client.UploadString(Url, JsonSerializer.Serialize(transaction));

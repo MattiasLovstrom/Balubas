@@ -18,9 +18,9 @@ namespace Balubas
             _repository = repository;
             _synchronizer = synchronizer;
             Listener = new HttpListener();
-            Listener.Prefixes.Add(WebStorage.Url);
+            Listener.Prefixes.Add(WebRepository.Url);
             Listener.Start();
-            Console.WriteLine("Listening for connections on {0}", WebStorage.Url);
+            Console.WriteLine("Listening for connections on {0}", WebRepository.Url);
             HandleIncomingConnections();
             Listener.Close();
         }
@@ -35,7 +35,7 @@ namespace Balubas
                 var response = ctx.Response;
                 if (request.HttpMethod == "GET")
                 {
-                    Console.Out.WriteLine("GET" + request.Url.AbsolutePath);
+                    Console.Out.WriteLine("GET: " + request.Url.AbsolutePath);
                     var hash = request.Url.AbsolutePath.TrimStart('/');
                     var data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(_repository.Get(hash), new JsonSerializerOptions { WriteIndented = true }));
                     response.ContentType = "text/html";

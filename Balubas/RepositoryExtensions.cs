@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Balubas
 {
-    public static class IRepositoryExtensions
+    public static class RepositoryExtensions
     {
         public static bool IsUsed(this IRepository repository, string hash) =>
             repository

@@ -9,7 +9,6 @@ namespace Balubas
         public string Receiver { get; set; }
         public string Sign { get; set; }
 
-
         public string GetHashData()
         {
             return $"{Amount}{Receiver}{Sign}";

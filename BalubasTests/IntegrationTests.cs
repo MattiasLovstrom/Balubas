@@ -17,7 +17,7 @@ namespace BalubasTests
         public void Init()
         {
             _cryptoHandler = new CryptoHandler();
-            _miner = new Miner(_cryptoHandler);
+            _miner = new Miner(_cryptoHandler){Difficulty = 1};
             ManualSetup();
             _repository = new Repository(_cryptoHandler);
 

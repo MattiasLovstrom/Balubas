@@ -63,7 +63,7 @@ namespace Balubas
             return dsa.VerifyData(Encoding.UTF8.GetBytes(data), FromBase58(signature));
         }
 
-        private static readonly char[] Base58Alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".ToCharArray();
+        private static readonly char[] Base58Alphabet = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".ToCharArray();
 
         public static string ToBase58(byte[] bytes)
         {

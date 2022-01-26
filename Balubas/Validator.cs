@@ -20,6 +20,7 @@ namespace Balubas
         {
             if (block.PreviousHash != _repository.FirstOrDefault()?.Hash) throw new ApplicationException($"Wrong sequence hash, previous hash expected {_repository.First().Hash} but was {block.PreviousHash}.");
             if (string.IsNullOrEmpty(block.Hash)) throw new ApplicationException("Hash cant be empty, mine the transaction before add it to the repository.");
+            if (block.Hash != _cryptoHandler.CalculateHash(block)) throw new ApplicationException($"Wrong hash, expected '{block.Hash}' but is '{_cryptoHandler.CalculateHash(block)}'.");
             if (string.IsNullOrEmpty(block.Sign)) throw new ApplicationException("Block needs to be signed.");
             var totalAmountIn = ValidateInputs(block);
             var totalAmountOut = ValidateOutputs(block);

@@ -17,7 +17,7 @@ namespace Balubas
 
         public void Mine(TransactionBlock transaction)
         {
-            var startWith = "".PadRight(Difficulty, '5');
+            var startWith = "".PadRight(Difficulty, '0');
             var random = new Random();
             transaction.Hash = "";
             do

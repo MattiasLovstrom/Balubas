@@ -49,9 +49,9 @@ namespace BlockChainTest.Tests
         [TestMethod]
         public void ToBase58Test()
         {
-            Assert.AreEqual("2NEpo7TZRhna7vSvL", CryptoHandler.ToBase58(Encoding.UTF8.GetBytes("Hello world!")));
+            Assert.AreEqual("1MDon6SYQgmZ6uRuK", CryptoHandler.ToBase58(Encoding.UTF8.GetBytes("Hello world!")));
 
-            var fromBase58 = CryptoHandler.FromBase58("2NEpo7TZRhna7vSvL");
+            var fromBase58 = CryptoHandler.FromBase58("1MDon6SYQgmZ6uRuK");
             var fromText = Encoding.UTF8.GetBytes("Hello world!");
             Assert.AreEqual(fromText.Length, fromBase58.Length);
             for (var i = 0; i < fromText.Length; i++)
@@ -70,15 +70,15 @@ namespace BlockChainTest.Tests
         [TestMethod]
         public void ToBase58SimpleTest()
         {
-            Assert.AreEqual("2F", CryptoHandler.ToBase58(new byte[] { 72 }));
-            Assert.AreEqual(72, CryptoHandler.FromBase58("2F")[0]);
+            Assert.AreEqual("1E", CryptoHandler.ToBase58(new byte[] { 72 }));
+            Assert.AreEqual(72, CryptoHandler.FromBase58("1E")[0]);
         }
 
         [TestMethod]
         public void ToBase58LeadingZeroTest()
         {
-            Assert.AreEqual("12F", CryptoHandler.ToBase58(new byte[] { 0, 72 }));
-            Assert.AreEqual(0, CryptoHandler.FromBase58("12F")[0]);
+            Assert.AreEqual("01E", CryptoHandler.ToBase58(new byte[] { 0, 72 }));
+            Assert.AreEqual(0, CryptoHandler.FromBase58("01E")[0]);
         }
     }
 }

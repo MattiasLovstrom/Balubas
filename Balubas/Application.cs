@@ -14,10 +14,12 @@ namespace Balubas
         private readonly IRepository _localStorage;
         private readonly ISynchronizer _synchronizer;
         private readonly WebRepository _webStorage;
+        private readonly Miner _miner;
 
         public Application()
         {
             _crypto = new CryptoHandler();
+            _miner = new Miner(_crypto) { Difficulty = 1 };
             _repository = new Repository(_crypto);
             _localStorage = new FileRepository(_crypto);
             var repositories = new List<IRepository> { _repository, _localStorage};
@@ -51,7 +53,7 @@ namespace Balubas
         {
             _synchronizer.Synchronize();
             var myWallet = LoadWallet(walletFriendlyName);
-            Console.Out.WriteLine("Balance: " + _repository.UnspentTransactions(myWallet.PublicKey));
+            Console.Out.WriteLine("Balance: " + _repository.UnspentAmount(myWallet.PublicKey));
         }
 
         public void Send(string walletFriendlyName, string toPublicKey, string amountString)
@@ -71,9 +73,25 @@ namespace Balubas
             }
 
             var transaction = wallet.CreateTransaction(amount, toPublicKey);
+            _miner.Mine(transaction);
             _repository.Add(transaction);
         
             _synchronizer.Synchronize();
+        }
+
+        public void ListWallets()
+        {
+            var walletFiles = Directory.EnumerateFiles(".", "*.wallet").ToArray();
+            if (!walletFiles.Any())
+                throw new ApplicationException(
+                    "Can't find a *.wallet file in current directory. (use 'createwallet' argument to create a wallet) ");
+
+            foreach (var walletFile in walletFiles)
+            {
+                var walletInfo = JsonSerializer.Deserialize<Wallet>(File.ReadAllText(walletFile));
+                var friendlyName = new FileInfo(walletFile).Name.Replace(".wallet", "");
+                Console.Out.WriteLine($"{friendlyName}: {walletInfo.PublicKey}");
+            }
         }
 
         private Wallet LoadWallet(string walletFriendlyName = null)
@@ -105,10 +123,11 @@ namespace Balubas
             var keys = _crypto.CreatePrivatePublicKeys();
             wallet.PrivateKey = keys[0];
             wallet.PublicKey = keys[1];
+            wallet.FriendlyName = friendlyName;
             var fileName = $"{friendlyName}.wallet";
             if (File.Exists(fileName)) throw new ApplicationException($"Wallet already exists {fileName}");
             File.WriteAllText(fileName, JsonSerializer.Serialize(wallet, new JsonSerializerOptions { WriteIndented = true }));
-            Console.Out.WriteLine($"Created wallet: {fileName}");
+            Console.Out.WriteLine($"Created wallet: {wallet.PublicKey}");
         }
 
         public void CreateGenesis()
@@ -124,7 +143,8 @@ namespace Balubas
             };
             transactionOutput.Sign = _crypto.Sign(transactionOutput.GetSigningData(), genesisWallet.PrivateKey);
             Genesis.Block.Outputs = new[] { transactionOutput };
-            Genesis.Block.Hash = Genesis.Hash = _crypto.CalculateHash(Genesis.Block);
+            _miner.Mine(Genesis.Block);
+            Genesis.Hash = Genesis.Block.Hash;
             Genesis.Block.Sign = _crypto.Sign(Genesis.Block.GetSigningData(), genesisWallet.PrivateKey);
 
             Console.Out.WriteLine($"public static string {nameof(Genesis.PublicKey)} = \"{genesisWallet.PublicKey}\";");

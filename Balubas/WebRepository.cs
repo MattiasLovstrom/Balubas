@@ -19,7 +19,6 @@ namespace Balubas
 
         public TransactionBlock Get(string hash = null)
         {
-            Console.Out.WriteLine("GET" + hash);
             using var client = new WebClient();
             return JsonSerializer.Deserialize<TransactionBlock>(client.DownloadString(Url + hash));
         }
@@ -28,7 +27,6 @@ namespace Balubas
         {
             // todo make this faster 
             //_validator.Validate(transaction);
-            Console.Out.WriteLine("POST" + transaction);
             using var client = new WebClient();
             client.UploadString(Url, JsonSerializer.Serialize(transaction));
         }

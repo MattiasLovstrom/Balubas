@@ -23,11 +23,14 @@ namespace Balubas
                     Console.Out.WriteLine("   send [wallet friendly name] publicKey amount   - creates a new wallet");
                     Console.Out.WriteLine("   createwallet <friendly name> - creates a new wallet");
                     Console.Out.WriteLine("   server  - start application as WebAPI");
+                    Console.Out.WriteLine("Wallets:");
+                    application.ListWallets();
                 }
             }
             catch (Exception ex)
             {
                 Console.Out.WriteLine(ex.Message);
+                throw;
             }
         }
     }

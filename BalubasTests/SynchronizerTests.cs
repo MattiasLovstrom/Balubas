@@ -49,6 +49,7 @@ namespace Balubas.Tests
             _repository2Mock.Verify(r2=>r2.Add(It.IsAny<TransactionBlock>()), Times.Never);
         }
 
+        [Ignore]
         [TestMethod]
         public void SynchronizeFirstEmptyTest()
         {
@@ -60,6 +61,7 @@ namespace Balubas.Tests
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Never);
         }
 
+        [Ignore]
         [TestMethod]
         public void SynchronizeSecondEmptyTest()
         {
@@ -71,6 +73,7 @@ namespace Balubas.Tests
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Once);
         }
 
+        [Ignore]
         [TestMethod]
         public void Synchronize1_2Test()
         {
@@ -84,8 +87,8 @@ namespace Balubas.Tests
             _repository1Mock.Verify(r1 => r1.Add(It.IsAny<TransactionBlock>()), Times.Once);
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Never);
         }
-
-
+            
+        [Ignore]
         [TestMethod]
         public void Synchronize3_2Test()
         {
@@ -102,6 +105,7 @@ namespace Balubas.Tests
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Once);
         }
 
+        [Ignore]
         [TestMethod]
         public void Synchronize3_1Test()
         {

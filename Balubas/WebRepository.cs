@@ -26,7 +26,7 @@ namespace Balubas
         public void Add(TransactionBlock transaction)
         {
             // todo make this faster 
-            //_validator.Validate(transaction);
+            _validator.Validate(transaction);
             using var client = new WebClient();
             client.UploadString(Url, JsonSerializer.Serialize(transaction));
         }
@@ -37,7 +37,9 @@ namespace Balubas
             while (current != null)
             {
                 yield return current;
-                current = Get(current.PreviousHash);
+                current = current.PreviousHash != null
+                    ? Get(current.PreviousHash)
+                    : null;
             }
         }
 

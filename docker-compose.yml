@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  api:
+    image: local/balubas:1
+    deploy:
+      replicas: 1
+      update_config:
+        failure_action: rollback
+        order: start-first
+      restart_policy:
+        condition: any
+        delay: 10s
+      placement:
+        constraints:
+          - node.labels.linux == true
+      labels: 
+        com.docker.ucp.access.label: /hotel01/wcm
+        com.docker.lb.hosts: seb-intra-maps-api-dev.publicus.tests.sebank.se
+        com.docker.lb.port: "1050"
+        com.seb.99: "99758"
+        com.seb.stepid: "1206"
+    networks:
+      - default
+
+networks:
+  default: 
+    labels:
+      com.docker.ucp.access.label: /hotel01/wcm

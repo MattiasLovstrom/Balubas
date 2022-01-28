@@ -25,10 +25,13 @@ namespace Balubas
 
         public TransactionBlock Get(string hash = null)
         {
-            foreach (var line in File.ReadLines(FileName))
+            var readLines = File.ReadLines(FileName);
+            if (!readLines.Any()) return Genesis.Block;
+            
+            foreach (var line in readLines)
             {
                 var block = JsonSerializer.Deserialize<TransactionBlock>(line);
-                if (hash == null || hash == block.Hash)
+                if (string.IsNullOrEmpty(hash) || hash == block.Hash)
                 {
                     return block;
                 }

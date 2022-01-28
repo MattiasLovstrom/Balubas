@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -18,7 +19,9 @@ namespace Balubas
             _repository = repository;
             _synchronizer = synchronizer;
             Listener = new HttpListener();
-            Listener.Prefixes.Add(WebRepository.Url);
+            //Listener.Prefixes.Add("http://*:88/");
+            Listener.Prefixes.Add("http://localhost:1050/");
+            //Listener.Prefixes.Add("http://127.0.0.1:1050/");
             Listener.Start();
             Console.WriteLine("Listening for connections on {0}", WebRepository.Url);
             HandleIncomingConnections();
@@ -36,8 +39,16 @@ namespace Balubas
                 if (request.HttpMethod == "GET")
                 {
                     Console.Out.WriteLine("GET: " + request.Url.AbsolutePath);
-                    var hash = request.Url.AbsolutePath.TrimStart('/');
-                    var data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(_repository.Get(hash), new JsonSerializerOptions { WriteIndented = true }));
+                    byte[] data;
+                    if (_repository.Any())
+                    {
+                        var hash = request.Url.AbsolutePath.TrimStart('/');
+                        data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(_repository.Get(hash), new JsonSerializerOptions { WriteIndented = true }));
+                    }
+                    else
+                    {
+                        data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(Genesis.Block, new JsonSerializerOptions { WriteIndented = true }));
+                    }
                     response.ContentType = "text/html";
                     response.ContentEncoding = Encoding.UTF8;
                     response.ContentLength64 = data.LongLength;

@@ -2,7 +2,7 @@
   "profiles": {
     "Balubas": {
       "commandName": "Project",
-      "commandLineArgs": "balance initial"
+      "commandLineArgs": "server"
     }
   }
 }

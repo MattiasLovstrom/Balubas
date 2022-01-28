@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Balubas.Model;
+using Balubas.Repositories;
 
 namespace Balubas
 {

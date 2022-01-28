@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Balubas.Model;
 
-namespace Balubas
+namespace Balubas.Repositories
 {
     public class FileRepository : IRepository
     {

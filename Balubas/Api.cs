@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using Balubas.Model;
+using Balubas.Repositories;
 
 namespace Balubas
 {

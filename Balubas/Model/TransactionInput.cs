@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace Balubas
+namespace Balubas.Model
 {
     public class TransactionInput : ISigningData
     {

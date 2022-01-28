@@ -1,4 +1,5 @@
 ﻿using Balubas;
+using Balubas.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // ReSharper disable once CheckNamespace

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Balubas
+namespace Balubas.Model
 {
     public static class Genesis
     {

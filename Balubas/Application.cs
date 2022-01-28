@@ -4,6 +4,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Balubas.Model;
+using Balubas.Repositories;
 
 namespace Balubas
 {
@@ -13,7 +15,6 @@ namespace Balubas
         private readonly IRepository _repository;
         private readonly IRepository _localStorage;
         private readonly ISynchronizer _synchronizer;
-        private readonly WebRepository _webStorage;
         private readonly Miner _miner;
 
         public Application()
@@ -25,9 +26,9 @@ namespace Balubas
             var repositories = new List<IRepository> { _repository, _localStorage};
             try
             {
-                _webStorage = new WebRepository(_crypto);
-                var _ = _webStorage.First();
-                repositories.Add(_webStorage);
+                var webStorage = new WebRepository(_crypto);
+                var _ = webStorage.First();
+                repositories.Add(webStorage);
             }
             catch
             {

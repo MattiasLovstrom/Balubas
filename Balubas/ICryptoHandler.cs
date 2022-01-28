@@ -1,4 +1,6 @@
-﻿namespace Balubas
+﻿using Balubas.Model;
+
+namespace Balubas
 {
     public interface ICryptoHandler
     {

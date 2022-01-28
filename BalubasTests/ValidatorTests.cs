@@ -2,6 +2,8 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using Balubas.Model;
+using Balubas.Repositories;
 
 // ReSharper disable once IdentifierTypo
 namespace Balubas.Tests

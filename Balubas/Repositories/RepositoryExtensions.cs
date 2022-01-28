@@ -1,21 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Balubas.Model;
 
-namespace Balubas
+namespace Balubas.Repositories
 {
     public static class RepositoryExtensions
     {
         public static bool IsUsed(this IRepository repository, string hash, int row)
         {
-            foreach (var block in repository)
-            {
-                if (block.Inputs != null)
-                {
-                    if (block.Inputs.Any(transactionInput => transactionInput.Hash == hash && transactionInput.Row == row)) return true;
-                }
-            }
-
-            return false;
+            return repository.Where(block => block.Inputs != null)
+                .Any(block => block.Inputs.Any(transactionInput => transactionInput.Hash == hash && transactionInput.Row == row));
         }
 
 

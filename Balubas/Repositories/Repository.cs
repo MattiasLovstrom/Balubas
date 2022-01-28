@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Balubas.Model;
 
-namespace Balubas
+namespace Balubas.Repositories
 {
     public class Repository : IRepository
     {

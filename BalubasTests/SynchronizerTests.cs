@@ -2,6 +2,8 @@
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using Balubas.Model;
+using Balubas.Repositories;
 
 // ReSharper disable once IdentifierTypo
 // ReSharper disable once CheckNamespace

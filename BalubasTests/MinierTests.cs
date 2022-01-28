@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Balubas.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Balubas.Tests
 {

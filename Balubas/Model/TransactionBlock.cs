@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Balubas
+namespace Balubas.Model
 {
     public class TransactionBlock : ISigningData
     {
@@ -14,7 +14,6 @@ namespace Balubas
         public TransactionInput[] Inputs { get; set; }
         public TransactionOutput[] Outputs { get; set; }
         public string Sign { get; set; }
-
 
         public string GetSigningData()
         {

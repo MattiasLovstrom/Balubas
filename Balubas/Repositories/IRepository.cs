@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Balubas.Model;
 
-namespace Balubas
+namespace Balubas.Repositories
 {
     public interface IRepository : IEnumerable<TransactionBlock>
     {

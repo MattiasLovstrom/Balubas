@@ -4,6 +4,8 @@ using System;
 using System.Linq;
 using System.Text.Json;
 using Balubas;
+using Balubas.Model;
+using Balubas.Repositories;
 
 // ReSharper disable once CheckNamespace
 namespace BlockChainTest.Tests

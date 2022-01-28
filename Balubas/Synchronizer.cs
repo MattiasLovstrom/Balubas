@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Balubas.Repositories;
 
 namespace Balubas
 {
@@ -40,9 +41,9 @@ namespace Balubas
         {
             var allInSync = true;
 
-            if (from == null || !from.Any()) return allInSync;
+            if (from == null || !from.Any()) return true;
 
-            if (to.Get(from.First().Hash) != null) return allInSync;
+            if (to.Get(from.First().Hash) != null) return true;
 
             var currentToHash = to.FirstOrDefault()?.Hash;
             var toSynchronize = from.TakeWhile(currentFrom => currentFrom.Hash != currentToHash).Reverse();

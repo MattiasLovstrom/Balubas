@@ -1,6 +1,8 @@
 ﻿using Balubas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
+using Balubas.Model;
+using Balubas.Repositories;
 
 namespace BalubasTests
 {

@@ -45,37 +45,35 @@ namespace Balubas.Tests
         [TestMethod]
         public void SynchronizeBothEmptyTest()
         {
-            _testObject.Synchronize();
-           
+            _testObject.Synchronize(_repository1Mock.Object, _repository2Mock.Object);
+
             _repository1Mock.Verify(r1=>r1.Add(It.IsAny<TransactionBlock>()), Times.Never);
             _repository2Mock.Verify(r2=>r2.Add(It.IsAny<TransactionBlock>()), Times.Never);
         }
 
-        [Ignore]
         [TestMethod]
         public void SynchronizeFirstEmptyTest()
         {
             _repository2List.Add(new TransactionBlock {Hash = "1"});
 
-            _testObject.Synchronize();
+            _testObject.Synchronize(_repository1Mock.Object, _repository2Mock.Object);
+            _testObject.Synchronize(_repository2Mock.Object, _repository1Mock.Object);
 
             _repository1Mock.Verify(r1 => r1.Add(It.IsAny<TransactionBlock>()), Times.Once);
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Never);
         }
 
-        [Ignore]
         [TestMethod]
         public void SynchronizeSecondEmptyTest()
         {
             _repository1List.Add(new TransactionBlock { Hash = "1" });
 
-            _testObject.Synchronize();
+            _testObject.Synchronize(_repository1Mock.Object, _repository2Mock.Object);
 
             _repository1Mock.Verify(r1 => r1.Add(It.IsAny<TransactionBlock>()), Times.Never);
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Once);
         }
 
-        [Ignore]
         [TestMethod]
         public void Synchronize1_2Test()
         {
@@ -84,13 +82,13 @@ namespace Balubas.Tests
             _repository2List.Add(new TransactionBlock { Hash = "2" });
             _repository2List.Add(new TransactionBlock { Hash = "1" });
 
-            _testObject.Synchronize();
+            _testObject.Synchronize(_repository1Mock.Object, _repository2Mock.Object);
+            _testObject.Synchronize(_repository2Mock.Object, _repository1Mock.Object);
 
             _repository1Mock.Verify(r1 => r1.Add(It.IsAny<TransactionBlock>()), Times.Once);
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Never);
         }
             
-        [Ignore]
         [TestMethod]
         public void Synchronize3_2Test()
         {
@@ -101,13 +99,12 @@ namespace Balubas.Tests
             _repository2List.Add(new TransactionBlock { Hash = "2" });
             _repository2List.Add(new TransactionBlock { Hash = "1" });
 
-            _testObject.Synchronize();
+            _testObject.Synchronize(_repository1Mock.Object, _repository2Mock.Object);
 
             _repository1Mock.Verify(r1 => r1.Add(It.IsAny<TransactionBlock>()), Times.Never);
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Once);
         }
 
-        [Ignore]
         [TestMethod]
         public void Synchronize3_1Test()
         {
@@ -117,7 +114,7 @@ namespace Balubas.Tests
 
             _repository2List.Add(new TransactionBlock { Hash = "1" });
 
-            _testObject.Synchronize();
+            _testObject.Synchronize(_repository1Mock.Object, _repository2Mock.Object);
 
             _repository1Mock.Verify(r1 => r1.Add(It.IsAny<TransactionBlock>()), Times.Never);
             _repository2Mock.Verify(r2 => r2.Add(It.IsAny<TransactionBlock>()), Times.Exactly(2));

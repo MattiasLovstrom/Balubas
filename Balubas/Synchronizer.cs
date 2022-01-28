@@ -37,7 +37,7 @@ namespace Balubas
             Console.Out.WriteLine();
         }
 
-        private bool Synchronize(IRepository from, IRepository to)
+        public bool Synchronize(IRepository from, IRepository to)
         {
             var allInSync = true;
 
